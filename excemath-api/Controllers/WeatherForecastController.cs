@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace excemath_api.Controllers
+namespace excemathApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]

@@ -1,5 +1,5 @@
 
-namespace excemath_api
+namespace excemathApi
 {
     public class Program
     {
