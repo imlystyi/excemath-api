@@ -2,20 +2,9 @@
 
 namespace excemathApi.Models
 {
-    /// <summary>
-    /// Представляє модель математичної проблеми, яка має унікальний ідентифікатор, тип, умову і розв'язок.
-    /// </summary>
-    public class MathProblem
+    public class AddMathProblemRequest
     {
         #region Властивості
-        /// <summary>
-        /// Повертає або встановлює унікальний ідентифікатор математичної проблеми.
-        /// </summary>
-        /// <returns>
-        /// Унікальний ідентифікатор математичної проблеми.
-        /// </returns>
-        public int Id { get; set; }
-
         /// <summary>
         /// Повертає або встановлює вид математичної проблеми, представлений елементом перерахування <see cref="ProblemKinds"/>.
         /// </summary>

@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using excemathApi.Data;
 
 namespace excemathApi
 {
@@ -7,16 +9,16 @@ namespace excemathApi
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            // Додаємо сервіси до контейнеру.
 
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddDbContext<MathProblemsAPIDbContext>(options => options.UseInMemoryDatabase("MathProblemsDb"));
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            // Конфігурація системи одержання та відправки запитів HTTP.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
