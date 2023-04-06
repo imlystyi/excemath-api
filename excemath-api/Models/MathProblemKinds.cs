@@ -1,9 +1,9 @@
 ﻿namespace excemathApi.Models
 {
     /// <summary>
-    /// Представляє перерахування можливих видів математичної проблеми (<see cref="MathProblem"/>).
+    /// Представляє перерахування можливих видів для об'єкту класу математичної проблеми <see cref="MathProblem"/>.
     /// </summary>
-    public enum ProblemKinds
+    public enum MathProblemKinds
     {
         DefiniteIntegrals = 0 // "Заглушка"
         // Тут будуть представлені можливі види математичної проблеми.

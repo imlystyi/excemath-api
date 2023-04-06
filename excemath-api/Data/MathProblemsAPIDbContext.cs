@@ -1,33 +1,39 @@
 ﻿#region Usings-частина
+
 using Microsoft.EntityFrameworkCore;
 using excemathApi.Models;
+
 #endregion
 
 namespace excemathApi.Data
 {
     /// <summary>
-    /// Надає контекст класу <see cref="MathProblem"/> для API та бази даних.
+    /// Представляє контекст, який забезпечує зв'язок між класом моделі математичної проблеми <see cref="MathProblem"/> і фізичною базою даних.
     /// </summary>
-    public class MathProblemsAPIDbContext : DbContext
+    public class MathProblemsApiDbContext : DbContext
     {
         #region Конструктори
+
         /// <summary>
         /// Створює екземпляр класу, використовуючи базовий конструктор класу <see cref="DbContext"/> та зазначені налаштування.
         /// </summary>
         /// <param name="options">Налаштування контексту.</param>
-        public MathProblemsAPIDbContext(DbContextOptions options) : base(options)
+        public MathProblemsApiDbContext(DbContextOptions<MathProblemsApiDbContext> options) : base(options)
         {
         }
+
         #endregion
 
         #region Властивості
+
         /// <summary>
-        /// Повертає або встановлює колекцію всіх сутностей у контексті класу <see cref="MathProblem"/>.
+        /// Повертає або встановлює набір всіх сутностей у базі даних у контексті класу <see cref="MathProblem"/>.
         /// </summary>
         /// <returns>
-        /// Колекцію всіх сутностей у контексті класу <see cref="MathProblem"/>.
+        /// Набір всіх сутностей у базі даних у контексті класу <see cref="MathProblem"/> як <see cref="DbSet{TEntity}"/> з елементів класу <see cref="MathProblem"/>.
         /// </returns>
         public DbSet<MathProblem> MathProblems { get; set; }
+
         #endregion
     }
 }
