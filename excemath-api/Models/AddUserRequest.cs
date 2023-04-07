@@ -1,4 +1,6 @@
-﻿#nullable disable
+﻿// Зробити XML-документацію.
+
+#nullable disable
 
 namespace excemathApi.Models
 {

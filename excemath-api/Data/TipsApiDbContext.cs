@@ -12,7 +12,7 @@ namespace excemathApi.Data
     /// <summary>
     /// 
     /// </summary>
-    public class UsersApiDbContext : DbContext
+    public class TipsApiDbContext : DbContext
     {
         #region Конструктори
 
@@ -20,7 +20,7 @@ namespace excemathApi.Data
         /// 
         /// </summary>
         /// <param name="options"></param>
-        public UsersApiDbContext(DbContextOptions<UsersApiDbContext> options) : base(options)
+        public TipsApiDbContext(DbContextOptions<TipsApiDbContext> options) : base(options)
         {            
         }
 
@@ -31,7 +31,7 @@ namespace excemathApi.Data
         /// <summary>
         /// 
         /// </summary>
-        public DbSet<User> Users { get; set; }
+        public DbSet<Tip> Tips { get; set; }
 
         #endregion
     }

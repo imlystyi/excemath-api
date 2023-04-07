@@ -1,4 +1,6 @@
-﻿#region Usings-частина
+﻿// Зробити XML-документацію.
+
+#region Usings-частина
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
