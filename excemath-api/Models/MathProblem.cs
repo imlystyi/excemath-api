@@ -1,10 +1,17 @@
-﻿#nullable disable
+﻿#region Usings-частина
+
+using System.ComponentModel.DataAnnotations.Schema;
+
+#endregion
 
 namespace excemathApi.Models
 {
     /// <summary>
     /// Представляє модель математичної проблеми, яка має унікальний ідентифікатор, тип, умову і розв'язок.
     /// </summary>
+    /// <remarks>
+    /// Має первинний ключ <see cref="Id"/>.
+    /// </remarks>
     public class MathProblem
     {
         #region Властивості
@@ -13,8 +20,9 @@ namespace excemathApi.Models
         /// Повертає або встановлює унікальний ідентифікатор математичної проблеми.
         /// </summary>
         /// <returns>
-        /// Унікальний ідентифікатор математичної проблеми як <see cref="int"/>.
+        /// Унікальний ідентифікатор математичної проблеми як <see cref="int"/>. Є первинним ключом.
         /// </returns>
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
 
         /// <summary>

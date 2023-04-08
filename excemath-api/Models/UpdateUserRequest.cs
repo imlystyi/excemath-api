@@ -1,11 +1,7 @@
-﻿// Зробити XML-документацію.
-
-#nullable disable
-
-namespace excemathApi.Models
+﻿namespace excemathApi.Models
 {
     /// <summary>
-    /// 
+    /// Представляє модель, описану класом <see cref="User"/>, яка використовується для запиту оновлення об'єкта цього класу в базі даних.
     /// </summary>
     public class UpdateUserRequest
     {

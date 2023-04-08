@@ -8,14 +8,14 @@ using excemathApi.Models;
 namespace excemathApi.Data
 {
     /// <summary>
-    /// Представляє контекст, який забезпечує зв'язок між класом моделі математичної проблеми <see cref="MathProblem"/> і фізичною базою даних.
+    /// Представляє контекст бази даних, який забезпечує зв'язок між класом моделі математичної проблеми <see cref="MathProblem"/> і фізичною базою даних.
     /// </summary>
     public class MathProblemsApiDbContext : DbContext
     {
         #region Конструктори
 
         /// <summary>
-        /// Створює екземпляр класу, використовуючи базовий конструктор класу <see cref="DbContext"/> та зазначені налаштування.
+        /// Створює екземпляр класу <see cref="MathProblemsApiDbContext"/>, використовуючи базовий конструктор класу <see cref="DbContext"/> та зазначені налаштування.
         /// </summary>
         /// <param name="options">Налаштування контексту.</param>
         public MathProblemsApiDbContext(DbContextOptions<MathProblemsApiDbContext> options) : base(options)

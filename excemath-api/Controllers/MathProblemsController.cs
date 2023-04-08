@@ -1,4 +1,4 @@
-﻿// Зробити XML-документацію.
+﻿#nullable enable
 
 #region Usings-частина
 
@@ -12,16 +12,16 @@ using excemathApi.Models;
 namespace excemathApi.Controllers
 {
     /// <summary>
-    /// Представляє контролер для контексту математичної проблеми <see cref="MathProblemsApiDbContext"/>.
+    /// Представляє контролер для контексту бази даних <see cref="MathProblemsApiDbContext"/>.
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class MathProblemsController : Controller
-    {
+    { 
         #region Поля
 
         /// <summary>
-        /// 
+        /// Контекст бази даних контролера.
         /// </summary>
         private readonly MathProblemsApiDbContext _dbContext;
 
@@ -30,9 +30,9 @@ namespace excemathApi.Controllers
         #region Конструктори
 
         /// <summary>
-        /// 
+        /// Створює екземпляр класу <see cref="MathProblemsController"/>, використовуючи зазначений контекст бази даних.
         /// </summary>
-        /// <param name="dbContext"></param>
+        /// <param name="dbContext">Контекст бази даних.</param>
         public MathProblemsController(MathProblemsApiDbContext dbContext) => _dbContext = dbContext;
 
         #endregion
@@ -63,7 +63,6 @@ namespace excemathApi.Controllers
 
             if (mathProblem is null)
                 return NotFound();
-            
 
             return Ok(mathProblem);
         }
@@ -83,8 +82,7 @@ namespace excemathApi.Controllers
 
             if (mathProblems is null)
                 return NotFound();
-            
-            
+
             return Ok(mathProblems);
         }
 
@@ -96,9 +94,9 @@ namespace excemathApi.Controllers
 
         // Додає математичну проблему до бази даних.
         [HttpPost]
-        public async Task<IActionResult>AddMathProblem(AddMathProblemRequest addMathProblemRequest)
+        public async Task<IActionResult> AddMathProblem(AddMathProblemRequest addMathProblemRequest)
         {
-            MathProblem last = _dbContext.MathProblems.LastOrDefault() ?? new MathProblem()
+            MathProblem last = _dbContext.MathProblems.OrderBy(m => m.Id).LastOrDefault() ?? new MathProblem()
             {
                 Id = 0,
                 Kind = MathProblemKinds.DefiniteIntegrals,

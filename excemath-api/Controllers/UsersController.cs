@@ -1,4 +1,4 @@
-﻿// Зробити XML-документацію.
+﻿#nullable enable
 
 #region Usings-частина
 
@@ -52,10 +52,10 @@ namespace excemathApi.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("{id:guid}")]
-        public async Task<IActionResult> GetUser([FromRoute] Guid id)
+        [Route("{nickname}")]
+        public async Task<IActionResult> GetUser([FromRoute] string nickname)
         {
-            User? user = await _dbContext.Users.FindAsync(id);
+            User? user = await _dbContext.Users.FindAsync(nickname);
 
             if (user is null)
                 return NotFound();
@@ -77,7 +77,7 @@ namespace excemathApi.Controllers
         {
             User user = new()
             {
-                Id = Guid.NewGuid(),
+                //Id = Guid.NewGuid(),
                 Nickname = addUserRequest.Nickname,
                 Password = addUserRequest.Password
             };
@@ -127,7 +127,7 @@ namespace excemathApi.Controllers
                 return NotFound();
 
             _dbContext.Users.Remove(user);
-            
+
             await _dbContext.SaveChangesAsync();
 
             return Ok(user);
