@@ -49,6 +49,20 @@ namespace excemathApi.Models
         /// </returns>
         public string Answer { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Tip 
+        { 
+            get
+            {
+                return Kind switch
+                {
+                    MathProblemKinds.TableIntegral => "",
+                    _ => throw new Exception("Неправильне визн")
+                };
+            }
+        }
         #endregion
     }
 }

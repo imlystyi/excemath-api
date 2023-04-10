@@ -99,7 +99,7 @@ namespace excemathApi.Controllers
             MathProblem last = _dbContext.MathProblems.OrderBy(m => m.Id).LastOrDefault() ?? new MathProblem()
             {
                 Id = 0,
-                Kind = MathProblemKinds.DefiniteIntegrals,
+                Kind = MathProblemKinds.TableIntegral,
                 Question = "empty",
                 Answer = "empty"
             };

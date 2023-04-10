@@ -1,6 +1,4 @@
-﻿#nullable disable
-
-namespace excemathApi.Models
+﻿namespace excemathApi.Models
 {
     // Клас для відлагодження; перевіряє здатність контроллера проводити запит на додавання математичної проблеми до бази даних.
     public class AddMathProblemRequest
