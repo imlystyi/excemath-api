@@ -56,10 +56,19 @@ namespace excemathApi.Models
         { 
             get
             {
+                // Розписати підказки (використовуючи LaTeX)
                 return Kind switch
                 {
-                    MathProblemKinds.TableIntegral => "",
-                    _ => throw new Exception("Неправильне визн")
+                    MathProblemKinds.TableIntegral => "підказка для табличного інтеграла",
+                    MathProblemKinds.MultipleIntegral => "підказка для кратного інтеграла",
+                    MathProblemKinds.LineIntegral => "підказка для лінійного інтеграла",
+                    MathProblemKinds.Matrix => "підказка для матриць",
+                    MathProblemKinds.Limit => "підказка для границь",
+                    MathProblemKinds.LinearEquation => "підказка для лінійних рівнянь",
+                    MathProblemKinds.QuadraticEquation => "підказка для квадратних рівнянь",
+
+                    //...
+                    _ => throw new Exception("Некоректний вид математичної проблеми")
                 };
             }
         }
