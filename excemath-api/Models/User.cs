@@ -1,6 +1,8 @@
-﻿// Передивитися, чи треба користувачу мати властивість Id, якщо ми можемо позначити його логін як PK, який не буде повторюватись.
+﻿#region Usings-частина
 
 using Microsoft.EntityFrameworkCore;
+
+#endregion
 
 namespace excemathApi.Models
 {
@@ -14,14 +16,6 @@ namespace excemathApi.Models
     public class User
     {
         #region Властивості 
-
-        ///// <summary>
-        ///// Повертає або встановлює унікальний ідентифікатор користувача.
-        ///// </summary>
-        ///// <returns>
-        ///// Унікальний ідентифікатор користувача як <see cref="Guid"/>.
-        ///// </returns>
-        //public Guid Id { get; set; }
 
         /// <summary>
         /// Повертає або встановлює псевдонім користувача.

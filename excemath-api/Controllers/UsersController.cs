@@ -82,8 +82,8 @@ namespace excemathApi.Controllers
                 Password = addUserRequest.Password
             };
 
-            await _dbContext.Users.AddAsync(user);
-            await _dbContext.SaveChangesAsync();
+            _ = await _dbContext.Users.AddAsync(user);
+            _ = await _dbContext.SaveChangesAsync();
 
             return Ok(user);
         }
@@ -107,7 +107,7 @@ namespace excemathApi.Controllers
             user.RightAnswers = updateUserRequest.RightAnswers;
             user.WrongAnswers = updateUserRequest.WrongAnswers;
 
-            await _dbContext.SaveChangesAsync();
+            _ = await _dbContext.SaveChangesAsync();
 
             return Ok(user);
         }
@@ -126,9 +126,9 @@ namespace excemathApi.Controllers
             if (user is null)
                 return NotFound();
 
-            _dbContext.Users.Remove(user);
+            _ = _dbContext.Users.Remove(user);
 
-            await _dbContext.SaveChangesAsync();
+            _ = await _dbContext.SaveChangesAsync();
 
             return Ok(user);
         }

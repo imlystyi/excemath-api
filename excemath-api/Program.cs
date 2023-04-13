@@ -10,34 +10,30 @@ namespace excemathApi
             var builder = WebApplication.CreateBuilder(args);
 
             // Додаємо сервіси до контейнеру.
+            _ = builder.Services.AddControllers();
+            _ = builder.Services.AddEndpointsApiExplorer();
+            _ = builder.Services.AddSwaggerGen();
 
-            builder.Services.AddControllers();
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
-
-            // builder.Services.AddDbContext<MathProblemsAPIDbContext>(options => options.UseInMemoryDatabase("MathProblemsDb"));
-            builder.Services.AddDbContext<MathProblemsApiDbContext>(options =>
+            // Налаштування контекстів.
+            _ = builder.Services.AddDbContext<MathProblemsApiDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
-            builder.Services.AddDbContext<UsersApiDbContext>(options =>
+            _ = builder.Services.AddDbContext<UsersApiDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
-            builder.Services.AddDbContext<SolvetMathProblemsApiDbContext>(options =>
+            _ = builder.Services.AddDbContext<SolvedMathProblemsApiDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 
             var app = builder.Build();
 
-            // Конфігурація системи одержання та відправки запитів HTTP.
+            // Налаштування системи одержання та відправки запитів HTTP.
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
+                _ = app.UseSwagger();
+                _ = app.UseSwaggerUI();
             }
 
-            app.UseHttpsRedirection();
-
-            app.UseAuthorization();
-
-
-            app.MapControllers();
+            _ = app.UseHttpsRedirection();
+            _ = app.UseAuthorization();
+            _ = app.MapControllers();
 
             app.Run();
         }

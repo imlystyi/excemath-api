@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace excemathApi.Models
 {
     /// <summary>
-    /// Представляє модель математичної проблеми, яка має унікальний ідентифікатор, тип, умову, правильний розв'язок та покроковий розв'язок.
+    /// Представляє модель розв'язаної математичної проблеми, яка має унікальний ідентифікатор, тип, умову, правильний розв'язок та покроковий розв'язок.
     /// </summary>
     public class SolvedMathProblem
     {
@@ -21,6 +21,14 @@ namespace excemathApi.Models
         /// </returns>
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
+
+        /// <summary>
+        /// Повертає або встановлює вид математичної проблеми, представлений елементом перерахування <see cref="MathProblemKinds"/>.
+        /// </summary>
+        /// <returns>
+        /// Вид математичної проблеми як елемент перерахування <see cref="MathProblemKinds"/>.
+        /// </returns>
+        public MathProblemKinds Kind { get; set; }
 
         /// <summary>
         /// Повертає або встановлює питання математичної проблеми.

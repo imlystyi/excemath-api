@@ -1,4 +1,6 @@
-﻿#region Usings-частина
+﻿#nullable enable
+
+#region Usings-частина
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +14,8 @@ namespace excemathApi.Controllers
     /// <summary>
     /// Представляє контролер для контексту бази даних <see cref="SolvedMathProblemsApiDbContext"/>.
     /// </summary>
+    [ApiController]
+    [Route("api/[controller]")]
     public class SolvedMathProblemsController: Controller
     {
         #region Поля
@@ -36,24 +40,24 @@ namespace excemathApi.Controllers
         #region HttpGet-методи
 
         /// <summary>
-        /// Дозволяє отримати всі математичні проблеми у вигляді списку.
+        /// Дозволяє отримати всі розв'язані математичні проблеми у вигляді списку.
         /// </summary>
         /// <returns>
-        /// Список математичних проблем як список <see cref="List{MathProblem}"/> з елементів класу <see cref="MathProblem"/>..
+        /// Список всіх розв'язаних математичних проблем як список <see cref="List{SolvedMathProblem}"/> з елементів класу <see cref="SolvedMathProblem"/>..
         /// </returns>
         [HttpGet]
-        public async Task<IActionResult> GetAllSolvetMathProblems() => Ok(await _dbContext.SolvedMathProblems.ToListAsync());
+        public async Task<IActionResult> GetAllSolvedMathProblems() => Ok(await _dbContext.SolvedMathProblems.ToListAsync());
 
         /// <summary>
-        /// Дозволяє отримати конкретну математичну проблему за її ідентифікатором.
+        /// Дозволяє отримати конкретну розв'язану математичну проблему за її ідентифікатором.
         /// </summary>
-        /// <param name="id">Ідентифікатор математичної проблеми.</param>
+        /// <param name="id">Ідентифікатор розв'язаної математичної проблеми.</param>
         /// <returns>
-        /// Конкретну математичну проблему за її ідентифікатором як <see cref="MathProblem"/>.
+        /// Конкретну розв'язану математичну проблему за її ідентифікатором як <see cref="SolvedMathProblem"/>.
         /// </returns>
         [HttpGet]
         [Route("{id:int}")]
-        public async Task<IActionResult> GetAllSolvetMathProblems([FromRoute] int id)
+        public async Task<IActionResult> GetSolvedMathProblem([FromRoute] int id)
         {
             SolvedMathProblem? solvetMathProblem = await _dbContext.SolvedMathProblems.FindAsync(id);
 
@@ -64,6 +68,5 @@ namespace excemathApi.Controllers
         }
 
         #endregion
-
     }
 }

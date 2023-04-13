@@ -31,6 +31,7 @@ namespace excemathApi.Models
         /// <returns>
         /// Вид математичної проблеми як елемент перерахування <see cref="MathProblemKinds"/>.
         /// </returns>
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public MathProblemKinds Kind { get; set; }
 
         /// <summary>
