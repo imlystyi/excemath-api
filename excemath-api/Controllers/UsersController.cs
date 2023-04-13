@@ -44,7 +44,7 @@ namespace excemathApi.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> GetAllUsers() => Ok(await _dbContext.Users.ToListAsync());
+        public async Task<IActionResult> GetAllUsers() => Ok(await _dbContext.Users.ToListAsync()); // Привести до GetUserRequest!
 
         /// <summary>
         /// 
@@ -60,7 +60,7 @@ namespace excemathApi.Controllers
             if (user is null)
                 return NotFound();
 
-            return Ok(user);
+            return Ok((GetUserRequest)user);
         }
 
         #endregion
