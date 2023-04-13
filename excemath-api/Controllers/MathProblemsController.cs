@@ -87,37 +87,5 @@ namespace excemathApi.Controllers
         }
 
         #endregion
-
-        #region HttpPost-методи
-
-        // Методи в цьому регіоні призначені виключно для відлагодження!
-
-        // Додає математичну проблему до бази даних.
-        [HttpPost]
-        public async Task<IActionResult> AddMathProblem(AddMathProblemRequest addMathProblemRequest)
-        {
-            MathProblem last = _dbContext.MathProblems.OrderBy(m => m.Id).LastOrDefault() ?? new MathProblem()
-            {
-                Id = 0,
-                Kind = MathProblemKinds.TableIntegral,
-                Question = "empty",
-                Answer = "empty"
-            };
-
-            MathProblem mathProblem = new()
-            {
-                Id = last.Id + 1,
-                Kind = addMathProblemRequest.Kind,
-                Question = addMathProblemRequest.Question,
-                Answer = addMathProblemRequest.Answer
-            };
-
-            await _dbContext.AddAsync(mathProblem);
-            await _dbContext.SaveChangesAsync();
-
-            return Ok(mathProblem);
-        }
-
-        #endregion
     }
 }
