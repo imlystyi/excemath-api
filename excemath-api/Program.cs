@@ -20,6 +20,8 @@ namespace excemathApi
             options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
             builder.Services.AddDbContext<UsersApiDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+            builder.Services.AddDbContext<SolvedMathProblemsApiDbContext>(options =>
+            options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 
             var app = builder.Build();
 
