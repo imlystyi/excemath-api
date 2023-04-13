@@ -3,9 +3,13 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
 #endregion
+
 namespace excemathApi.Models
 {
-    public class SolvetMathProblem
+    /// <summary>
+    /// Представляє модель математичної проблеми, яка має унікальний ідентифікатор, тип, умову, правильний розв'язок та покроковий розв'язок.
+    /// </summary>
+    public class SolvedMathProblem
     {
         #region Властивості
 
@@ -35,9 +39,11 @@ namespace excemathApi.Models
         public string Answer { get; set; }
 
         /// <summary>
-        /// Повертає або встановлює пкороковий розв'язок математичної проблеми.
+        /// Повертає або встановлює покроковий розв'язок математичної проблеми.
         /// </summary>
         /// <returns>
+        /// Покроковий розв'язок математичної проблеми як <see cref="string"/>.
+        /// </returns>
         public string Solution { get; set; }
 
         #endregion

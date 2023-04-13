@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace excemathApi.Models
 {
     /// <summary>
-    /// Представляє модель математичної проблеми, яка має унікальний ідентифікатор, тип, умову і розв'язок.
+    /// Представляє модель математичної проблеми, яка має унікальний ідентифікатор, тип, умову та правильний розв'язок.
     /// </summary>
     /// <remarks>
     /// Має первинний ключ <see cref="Id"/>.
@@ -79,9 +79,7 @@ namespace excemathApi.Models
                     MathProblemKinds.NumericalSequences => "підказка для числових послідовностях",
                     MathProblemKinds.Function => "підказка для функцій",
                     MathProblemKinds.Combinatorics => "підказка для комбінаторики",
-                    MathProblemKinds.Special => "математичні проблеми, для яких існують покрокові розв'язання",
 
-                    //...
                     _ => throw new Exception("Некоректний вид математичної проблеми")
                 };
             }

@@ -9,24 +9,27 @@ using excemathApi.Models;
 
 namespace excemathApi.Controllers
 {
-    public class SolvetMathProblemsController: Controller
+    /// <summary>
+    /// Представляє контролер для контексту бази даних <see cref="SolvedMathProblemsApiDbContext"/>.
+    /// </summary>
+    public class SolvedMathProblemsController: Controller
     {
         #region Поля
 
         /// <summary>
         /// Контекст бази даних контролера.
         /// </summary>
-        private readonly SolvetMathProblemsApiDbContext _dbContext;
+        private readonly SolvedMathProblemsApiDbContext _dbContext;
 
         #endregion
 
         #region Конструктори
 
         /// <summary>
-        /// Створює екземпляр класу <see cref="MathProblemsController"/>, використовуючи зазначений контекст бази даних.
+        /// Створює екземпляр класу <see cref="SolvedMathProblemsController"/>, використовуючи зазначений контекст бази даних.
         /// </summary>
         /// <param name="dbContext">Контекст бази даних.</param>
-        public SolvetMathProblemsController(SolvetMathProblemsApiDbContext dbContext) => _dbContext = dbContext;
+        public SolvedMathProblemsController(SolvedMathProblemsApiDbContext dbContext) => _dbContext = dbContext;
 
         #endregion
 
@@ -39,7 +42,7 @@ namespace excemathApi.Controllers
         /// Список математичних проблем як список <see cref="List{MathProblem}"/> з елементів класу <see cref="MathProblem"/>..
         /// </returns>
         [HttpGet]
-        public async Task<IActionResult> GetAllSolvetMathProblems() => Ok(await _dbContext.SolvetMathProblems.ToListAsync());
+        public async Task<IActionResult> GetAllSolvetMathProblems() => Ok(await _dbContext.SolvedMathProblems.ToListAsync());
 
         /// <summary>
         /// Дозволяє отримати конкретну математичну проблему за її ідентифікатором.
@@ -52,7 +55,7 @@ namespace excemathApi.Controllers
         [Route("{id:int}")]
         public async Task<IActionResult> GetAllSolvetMathProblems([FromRoute] int id)
         {
-            SolvetMathProblem? solvetMathProblem = await _dbContext.SolvetMathProblems.FindAsync(id);
+            SolvedMathProblem? solvetMathProblem = await _dbContext.SolvedMathProblems.FindAsync(id);
 
             if (solvetMathProblem is null)
                 return NotFound();
