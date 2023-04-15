@@ -1,13 +1,9 @@
-﻿#region Usings-частина
-
-using Microsoft.EntityFrameworkCore;
-
-#endregion
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace excemathApi.Models
 {
     /// <summary>
-    /// Представляє модель користувача, який має унікальний ідентифікатор, псевдонім, пароль, кількість правильних та неправильних відповідей.
+    /// Представляє звичайну модель користувача, яка має унікальний псевдонім, пароль, кількість правильних та неправильних відповідей.
     /// </summary>
     /// <remarks>
     /// Має первинний ключ <see cref="Nickname"/>.
@@ -25,6 +21,7 @@ namespace excemathApi.Models
         /// </returns>
         public string Nickname { get; set; }
 
+        // TODO: шифрування паролю.
         /// <summary>
         /// Повертає або встановлює пароль користувача.
         /// </summary>
@@ -36,6 +33,9 @@ namespace excemathApi.Models
         /// <summary>
         /// Повертає або встановлює кількість правильних відповідей користувача.
         /// </summary>
+        /// <remarks>
+        /// Має значення 0 за замовчуванням.
+        /// </remarks>
         /// <returns>
         /// Кількість правильних відповідей користувача як <see cref="int"/>.
         /// </returns>
@@ -44,6 +44,9 @@ namespace excemathApi.Models
         /// <summary>
         /// Повертає або встановлює кількість неправильних відповідей користувача.
         /// </summary>
+        /// <remarks>
+        /// Має значення 0 за замовчуванням.
+        /// </remarks>
         /// <returns>
         /// Кількість неправильних відповідей користувача як <see cref="int"/>.
         /// </returns>

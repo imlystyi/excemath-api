@@ -1,8 +1,4 @@
-﻿#region Usings-частина
-
-using System.ComponentModel.DataAnnotations.Schema;
-
-#endregion
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace excemathApi.Models
 {

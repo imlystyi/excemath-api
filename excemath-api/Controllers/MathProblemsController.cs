@@ -1,13 +1,9 @@
 ﻿#nullable enable
 
-#region Usings-частина
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using excemathApi.Data;
 using excemathApi.Models;
-
-#endregion
 
 namespace excemathApi.Controllers
 {
@@ -20,9 +16,8 @@ namespace excemathApi.Controllers
     { 
         #region Поля
 
-        /// <summary>
-        /// Контекст бази даних контролера.
-        /// </summary>
+
+        // Контекст бази даних контролера.
         private readonly MathProblemsApiDbContext _dbContext;
 
         #endregion
@@ -43,7 +38,7 @@ namespace excemathApi.Controllers
         /// Дозволяє отримати всі математичні проблеми у вигляді списку.
         /// </summary>
         /// <returns>
-        /// Список математичних проблем як список <see cref="List{MathProblem}"/> з елементів класу <see cref="MathProblem"/>..
+        /// Список математичних проблем як список <see cref="List{MathProblem}"/> з елементів класу <see cref="MathProblem"/>.
         /// </returns>
         [HttpGet]
         public async Task<IActionResult> GetAllMathProblems() => Ok(await _dbContext.MathProblems.ToListAsync());
@@ -76,7 +71,7 @@ namespace excemathApi.Controllers
         /// </returns>
         [HttpGet]
         [Route("{ids}")]
-        public async Task<IActionResult> GetMathProblemsList([FromRoute] int[] ids) // Не працює!
+        public async Task<IActionResult> GetMathProblemsList([FromRoute] List<int> ids) // Замінити List.
         {
             List<MathProblem> mathProblems = await Task.Run(() => _dbContext.MathProblems.Where(p => ids.Contains(p.Id)).ToList());
 

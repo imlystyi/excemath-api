@@ -1,9 +1,5 @@
-﻿#region Usings-частина
-
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using excemathApi.Models;
-
-#endregion
 
 namespace excemathApi.Data
 {

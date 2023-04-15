@@ -57,26 +57,31 @@ namespace excemathApi.Models
         { 
             get
             {
-                // Розписати підказки (використовуючи LaTeX)
+                // TODO: розписати підказки (використовуючи LaTeX).
                 return Kind switch
                 {
+                    // TODO: подумати, як замінити логіку в моделі.
                     MathProblemKinds.TableIntegral => "підказка для табличного інтеграла",
                     MathProblemKinds.MultipleIntegral => "підказка для кратного інтеграла",
                     MathProblemKinds.LineIntegral => "підказка для лінійного інтеграла",
+
                     MathProblemKinds.Matrix => "підказка для матриць",
                     MathProblemKinds.Limit => "підказка для границь",
+
                     MathProblemKinds.LinearEquation => "підказка для лінійних рівнянь",
                     MathProblemKinds.QuadraticEquation => "підказка для квадратних рівнянь",
                     MathProblemKinds.IrrationalEquation => "підказка для ірраціональних рівнянь",
                     MathProblemKinds.ExponentialEquation => "підказка для показникових рівнянь",
                     MathProblemKinds.LogarithmicEquation => "підказка для логарифмічних рівнянь",
                     MathProblemKinds.TrigonometricEquation => "підказка для тригонометричних рівнянь",
+
                     MathProblemKinds.LinearInequality => "підказка для лінійних нерівностей ",
                     MathProblemKinds.QuadraticInequality => "підказка для квадратичних нерівностей ",
                     MathProblemKinds.IrrationalInequality => "підказка для ірраціональних нерівностей ",
                     MathProblemKinds.ExponentialInequality => "підказка для показникових нерівностей ",
                     MathProblemKinds.LogarithmicInequality => "підказка для логарифмічних нерівностей ",
                     MathProblemKinds.TrigonometricInequality => "підказка для тригонометричних нерівностей ",
+
                     MathProblemKinds.NumericalSequences => "підказка для числових послідовностях",
                     MathProblemKinds.Function => "підказка для функцій",
                     MathProblemKinds.Combinatorics => "підказка для комбінаторики",

@@ -1,33 +1,33 @@
 ﻿namespace excemathApi.Models
 {
     /// <summary>
-    /// 
+    /// Представляє модель користувача запиту отримання, описану звичайною моделлю <see cref="User"/>, яка має унікальний псевдонім, кількість правильних та неправильних відповідей.
     /// </summary>
     public class GetUserRequest
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        public string Nickname { get; private set; }
+        #region Властивості
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public int RightAnswers { get; private set; }
+        /// <inheritdoc cref="User.Nickname"/>
+        public string Nickname { get; init; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public int WrongAnswers { get; private set; }
+        /// <inheritdoc cref="User.RightAnswers"/>
+        public int RightAnswers { get; init; }
 
-        public static explicit operator GetUserRequest(User user)
+        /// <inheritdoc cref="User.WrongAnswers"/>
+        public int WrongAnswers { get; init; }
+
+        #endregion
+
+        #region Перевизначені оператори
+
+        // Дозволяє звести тип звичайної моделі користувача до моделі користувача запиту отримання.
+        public static explicit operator GetUserRequest(User user) => new()
         {
-            return new GetUserRequest
-            {
-                Nickname = user.Nickname,
-                RightAnswers = user.RightAnswers,
-                WrongAnswers = user.WrongAnswers
-            };
-        }
+            Nickname = user.Nickname,
+            RightAnswers = user.RightAnswers,
+            WrongAnswers = user.WrongAnswers
+        };
+
+        #endregion
     }
 }
