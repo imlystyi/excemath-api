@@ -51,6 +51,35 @@ namespace excemathApi.Controllers
         public async Task<IActionResult> GetAllUsers() => Ok((await _dbContext.Users.ToListAsync()).ConvertAll(u => (GetUserRequest)u));
 
         /// <summary>
+        /// Дозволяє отримати рейтинговий список всіх користувачів.
+        /// </summary>
+        /// <remarks>
+        /// Користувачі у списку повертаються як анонимні типи, які мають такі члени, як псевдонім та рейтинг: <see langword="new"/> { <see cref="User.Nickname"/>, Rating }.<br>
+        /// Рейтинг розраховується наступним чином:</br>
+        /// <code> 
+        /// double rating = ((User.RightAnswers + User.WrongAnswers) > 0) ? ((double)User.RightAnswers / (User.RightAnswers + User.WrongAnswers)) : 0;
+        /// </code>
+        /// </remarks>
+        /// <returns>
+        /// Список користувачів як список <see cref="List{GetUserRequest}"/> з елементів анонімного класу (інтегрований у HTTP-відповідь <see cref="OkObjectResult"/>).
+        /// </returns>
+        [HttpGet]
+        [Route("get/rating_list")]
+        public async Task<IActionResult> GetRatingList()
+        {
+            List<User> users = await _dbContext.Users.ToListAsync();
+
+            var ratingList = users.Select(u =>
+            {
+                double rating = ((u.RightAnswers + u.WrongAnswers) > 0) ? ((double)u.RightAnswers / (u.RightAnswers + u.WrongAnswers)) : 0;
+
+                return new { u.Nickname, Rating = rating };
+            }).OrderByDescending(r => r.Rating).ToList();
+
+            return Ok(ratingList);
+        }
+
+        /// <summary>
         /// Дозволяє отримати конкретного користувача за його псевдонімом.
         /// </summary>
         /// <remarks>

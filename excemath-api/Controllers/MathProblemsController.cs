@@ -82,6 +82,7 @@ namespace excemathApi.Controllers
 
             return Ok(mathProblems);
         }
+
         /// <summary>
         /// Дозволяє отримати конкретну математичну проблему за вказаним ідентифікатором.
         /// </summary>
