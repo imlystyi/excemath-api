@@ -8,13 +8,13 @@
         #region Властивості
 
         /// <inheritdoc cref="User.Nickname"/>
-        public string Nickname { get; init; }
+        public string Nickname { get; set; }
 
         /// <inheritdoc cref="User.RightAnswers"/>
-        public int RightAnswers { get; init; }
+        public int RightAnswers { get; set; }
 
         /// <inheritdoc cref="User.WrongAnswers"/>
-        public int WrongAnswers { get; init; }
+        public int WrongAnswers { get; set; }
 
         #endregion
 

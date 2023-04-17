@@ -53,8 +53,8 @@ namespace excemathApi.Models
         /// <summary>
         /// 
         /// </summary>
-        public string Tip 
-        { 
+        public string Tip
+        {
             get
             {
                 // TODO: розписати підказки (використовуючи LaTeX).

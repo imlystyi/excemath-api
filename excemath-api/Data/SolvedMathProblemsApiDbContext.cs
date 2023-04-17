@@ -10,7 +10,7 @@ namespace excemathApi.Data
     /// <summary>
     /// Представляє контролер для контексту бази даних <see cref="SolvedMathProblem"/>.
     /// </summary>
-    public class SolvedMathProblemsApiDbContext: DbContext
+    public class SolvedMathProblemsApiDbContext : DbContext
     {
         #region Конструктори
 

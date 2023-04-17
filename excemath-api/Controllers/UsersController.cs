@@ -20,7 +20,7 @@ namespace excemathApi.Controllers
     {
         #region Поля
 
-        // Контекст бази даних контролеру.
+        // Контекст бази даних контролера.
         private readonly UsersApiDbContext _dbContext;
 
         #endregion
@@ -28,7 +28,7 @@ namespace excemathApi.Controllers
         #region Конструктори
 
         /// <summary>
-        /// Створює екземпляр класу <see cref="UsersController"/>, використовуючи зазначений контекст бази даних. 
+        /// Створює екземпляр класу <see cref="UsersController"/>, використовуючи вказаний контекст бази даних. 
         /// </summary>
         /// <param name="dbContext">Контекст бази даних.</param>
         public UsersController(UsersApiDbContext dbContext) => _dbContext = dbContext;
@@ -47,7 +47,7 @@ namespace excemathApi.Controllers
         /// Список користувачів як список <see cref="List{GetUserRequest}"/> з елементів класу <see cref="GetUserRequest"/> (інтегрований у HTTP-відповідь <see cref="OkObjectResult"/>).
         /// </returns>
         [HttpGet]
-        [Route("get")]
+        [Route("get/all")]
         public async Task<IActionResult> GetAllUsers() => Ok((await _dbContext.Users.ToListAsync()).ConvertAll(u => (GetUserRequest)u));
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace excemathApi.Controllers
         /// </remarks>
         /// <param name="nickname">Псевдонім користувача.</param>
         /// <returns>
-        /// Якщо користувача знайдено, конкретного користувача як <see cref="GetUserRequest"/> (інтегрованого у HTTP-відповідь <see cref="OkObjectResult"/>);<br>
+        /// Якщо користувача з таким псевдонімом знайдено, конкретного користувача як <see cref="GetUserRequest"/> (інтегрованого у HTTP-відповідь <see cref="OkObjectResult"/>);<br>
         /// інакше, HTTP-відповідь <see cref="NotFoundObjectResult"/>.</br>
         /// </returns>
         [HttpGet]
@@ -94,10 +94,10 @@ namespace excemathApi.Controllers
         {
             AddUserRequestValidator validator = new(_dbContext);
             ValidationResult validationResult = await validator.ValidateAsync(addUserRequest);
-            
+
             if (!validationResult.IsValid)
                 return BadRequest(validationResult.Errors);
-                        
+
             else
             {
                 User user = new()

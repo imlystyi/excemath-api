@@ -1,10 +1,10 @@
 ﻿namespace excemathApi.Models
 {
     /// <summary>
-    /// Представляє перерахування можливих видів для об'єкту класу математичної проблеми <see cref="MathProblem"/>.
+    /// Представляє перерахування можливих видів для моделі математичної проблеми <see cref="MathProblem"/> або <see cref="SolvedMathProblem"/> (<see cref="MathProblem.Kind"/> або <see cref="SolvedMathProblem.Kind"/>).
     /// </summary>
     public enum MathProblemKinds
-    {      
+    {
         /// <summary>
         /// Представляє вид "Табличні інтеграли".
         /// </summary>
@@ -23,7 +23,7 @@
         /// <summary>
         /// Представляє вид "Матриці".
         /// </summary>
-        Matrix, 
+        Matrix,
 
         /// <summary>
         /// Представляє вид "Границі".

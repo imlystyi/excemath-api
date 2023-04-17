@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using excemathApi.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace excemathApi
 {
@@ -13,7 +14,9 @@ namespace excemathApi
             _ = builder.Services.AddControllers();
             _ = builder.Services.AddEndpointsApiExplorer();
             _ = builder.Services.AddSwaggerGen();
-
+            //_ = builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            //{
+            //})
             // Налаштування контекстів.
             _ = builder.Services.AddDbContext<MathProblemsApiDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
