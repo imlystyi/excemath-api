@@ -66,13 +66,13 @@ namespace excemathApi.Controllers
         /// <summary>
         /// Дозволяє отримати список математичних проблем за вказаним видом.
         /// </summary>
-        /// <param name="ids">Вид математичної проблеми.</param>
+        /// <param name="kind">Вид математичної проблеми.</param>
         /// <returns>
         /// Якщо за видом знайдено принаймні одну математичну проблему, то список знайдених математичних проблем як список <see cref="List{MathProblem}"/> з елементів класу <see cref="MathProblem"/> (інтегрований у HTTP-відповідь <see cref="OkObjectResult"/>);<br>
         /// інакше, HTTP-відповідь <see cref="NotFoundObjectResult"/>.</br>
         /// </returns>
         [HttpGet]
-        [Route("get/kinds_list")]
+        [Route("get/kinds_list/{kind}")]
         public async Task<IActionResult> GetMathProblemsList([FromRoute] MathProblemKinds kind)
         {
             List<MathProblem> mathProblems = await Task.Run(() => _dbContext.MathProblems.Where(p => p.Kind == kind).ToListAsync());
@@ -88,7 +88,7 @@ namespace excemathApi.Controllers
         /// </summary>
         /// <param name="id">Ідентифікатор математичної проблеми.</param>
         /// <returns>
-        /// Якщо математичну проблему з таким ідентифікатором знайдено, конкретну математичну проблему як <see cref="MathProblem"/> (інтегровану у HTTP-відповідь <see cref="OkObjectResult"/>);<br>
+        /// Якщо математичну проблему з таким ідентифікатором знайдено, конкретну математичну проблему як <see cref="MathProblem"/> (інтегрована у HTTP-відповідь <see cref="OkObjectResult"/>);<br>
         /// інакше, HTTP-відповідь <see cref="NotFoundObjectResult"/>.</br>
         /// </returns>
         [HttpGet]

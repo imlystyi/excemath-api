@@ -1,13 +1,9 @@
 ﻿#nullable enable
 
-#region Usings-частина
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using excemathApi.Data;
 using excemathApi.Models;
-
-#endregion
 
 namespace excemathApi.Controllers
 {
@@ -58,13 +54,33 @@ namespace excemathApi.Controllers
         /// інакше, HTTP-відповідь <see cref="NotFoundObjectResult"/>.</br>
         /// </returns>
         [HttpGet]
-        [Route("get/list")]
+        [Route("get/ids_list")]
         public async Task<IActionResult> GetSolvedMathProblemsList([FromQuery] List<int> ids)
         {
             List<SolvedMathProblem> solvedMathProblems = await Task.Run(() => _dbContext.SolvedMathProblems.Where(p => ids.Contains(p.Id)).ToListAsync());
 
             if (!solvedMathProblems.Any())
                 return NotFound("За вказаними ідентифікаторами не знайдено жодної розв'язаної математичної проблеми.");
+
+            return Ok(solvedMathProblems);
+        }
+
+        /// <summary>
+        /// Дозволяє отримати список розв'язаних математичних проблем за вказаним видом.
+        /// </summary>
+        /// <param name="kind">Вид математичної проблеми.</param>
+        /// <returns>
+        /// Якщо за видом знайдено принаймні одну розв'язану математичну проблему, то список знайдених розв'язаних математичних проблем як список <see cref="List{SolvedMathProblem}"/> з елементів класу <see cref="SolvedMathProblem"/> (інтегрований у HTTP-відповідь <see cref="OkObjectResult"/>);<br>
+        /// інакше, HTTP-відповідь <see cref="NotFoundObjectResult"/>.</br>
+        /// </returns>
+        [HttpGet]
+        [Route("get/kinds_list/{kind}")]
+        public async Task<IActionResult> GetSolvedMathProblemsList([FromRoute] MathProblemKinds kind)
+        {
+            List<SolvedMathProblem> solvedMathProblems = await Task.Run(() => _dbContext.SolvedMathProblems.Where(p => p.Kind == kind).ToListAsync());
+
+            if (!solvedMathProblems.Any())
+                return NotFound("За вказаним видом не знайдено жодної розв'язаної математичної проблеми.");
 
             return Ok(solvedMathProblems);
         }
