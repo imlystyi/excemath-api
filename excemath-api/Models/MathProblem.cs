@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace excemathApi.Models;
 
 /// <summary>
-/// Представляє модель математичної проблеми, яка має унікальний ідентифікатор, тип, умову та правильний розв'язок.
+/// Представляє модель математичної проблеми, яка має унікальний ідентифікатор, тип, умову, правильний розв'язок та загальну підказку.
 /// </summary>
 /// <remarks>
 /// Має первинний ключ <see cref="Id"/>.
@@ -17,7 +17,7 @@ public class MathProblem
     #region Властивості
 
     /// <summary>
-    /// Повертає або встановлює унікальний ідентифікатор математичної проблеми.
+    /// Повертає унікальний ідентифікатор математичної проблеми.
     /// </summary>
     /// <returns>
     /// Унікальний ідентифікатор математичної проблеми як <see cref="int"/>. Є первинним ключом.
@@ -26,7 +26,7 @@ public class MathProblem
     public int Id { get; set; }
 
     /// <summary>
-    /// Повертає або встановлює вид математичної проблеми, представлений елементом перерахування <see cref="MathProblemKinds"/>.
+    /// Повертає вид математичної проблеми, представлений елементом перерахування <see cref="MathProblemKinds"/>.
     /// </summary>
     /// <returns>
     /// Вид математичної проблеми як елемент перерахування <see cref="MathProblemKinds"/>.
@@ -35,7 +35,7 @@ public class MathProblem
     public MathProblemKinds Kind { get; set; }
 
     /// <summary>
-    /// Повертає або встановлює питання математичної проблеми.
+    /// Повертає питання математичної проблеми.
     /// </summary>
     /// <returns>
     /// Питання математичної проблеми як <see cref="string"/>.
@@ -43,7 +43,7 @@ public class MathProblem
     public string Question { get; set; }
 
     /// <summary>
-    /// Повертає або встановлює правильний розв'язок математичної проблеми.
+    /// Повертає правильний розв'язок математичної проблеми.
     /// </summary>
     /// <returns>
     /// Правильний розв'язок математичної проблеми як <see cref="string"/>.
@@ -51,16 +51,15 @@ public class MathProblem
     public string Answer { get; set; }
 
     /// <summary>
-    /// 
+    /// Повертає загальну підказку математичної проблеми.
     /// </summary>
-    public string Tip
-    {
-        get
-        {
+    /// <returns>
+    /// Загальну підказку математичної проблеми як <see cref="string"/>.
+    /// </returns>
+    public string Tip =>
             // TODO: розписати підказки (використовуючи LaTeX).
-            return Kind switch
+            Kind switch
             {
-                // TODO: подумати, як замінити логіку в моделі.
                 MathProblemKinds.TableIntegral => "підказка для табличного інтеграла",
                 MathProblemKinds.MultipleIntegral => "підказка для кратного інтеграла",
                 MathProblemKinds.LineIntegral => "підказка для лінійного інтеграла",
@@ -86,9 +85,8 @@ public class MathProblem
                 MathProblemKinds.Function => "підказка для функцій",
                 MathProblemKinds.Combinatorics => "підказка для комбінаторики",
 
-                _ => throw new Exception("Некоректний вид математичної проблеми")
+                _ => throw new ArgumentException("Некоректний вид математичної проблеми", nameof(Kind))
             };
-        }
-    }
+
     #endregion
 }

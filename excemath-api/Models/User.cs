@@ -21,7 +21,6 @@ public class User
     /// </returns>
     public string Nickname { get; set; }
 
-    // TODO: шифрування паролю.
     /// <summary>
     /// Повертає або встановлює пароль користувача.
     /// </summary>
