@@ -45,26 +45,26 @@ public class UsersAuthenticationController : Controller
     #region Методи
 
     /// <summary>
-    /// Дозволяє отримати успішність авторизації користувача, визначивши її за вказаною моделлю ідентичності.
+    /// Дозволяє клієнту отримати успішність авторизації користувача, визначивши її за вказаною моделлю ідентичності.
     /// </summary>
     /// <param name="userIdentity">Модель ідентичності користувача.</param>
     /// <returns>Якщо авторизація пройшла успішно, <see langword="true"/> (інтегроване у HTTP-відповідь <see cref="OkObjectResult"/>);<br>
     /// інакше, <see langword="false"/> (інтегроване у HTTP-відповідь <see cref="BadRequestObjectResult"/>).</br></returns>
     [HttpPost]
-    [Route("login")]
-    public async Task<IActionResult> Authorize([FromBody] UserIdentity userIdentity)
+    [Route("authorize")]
+    public async Task<IActionResult> Authorize([FromQuery] UserIdentity userIdentity)
     {
         User? user = await _dbContext.Users.FindAsync(userIdentity.Nickname);
 
         if (user is not null && DecryptPassword(user.Password) == userIdentity.Password)
-            return Ok(true);
+            return Ok();
 
         else
-            return BadRequest(false);
+            return BadRequest();
     }
 
     /// <summary>
-    /// Дозволяє зареєструвати користувача за вказаною моделлю ідентичності (додати його в фізичну базу даних).
+    /// Дозволяє клієнту зареєструвати користувача за вказаною моделлю ідентичності (додати його в фізичну базу даних).
     /// </summary>
     /// <param name="userIdentity">Модель ідентичності користувача.</param>
     /// <returns>
@@ -73,7 +73,7 @@ public class UsersAuthenticationController : Controller
     /// </returns>
     [HttpPost]
     [Route("register")]
-    public async Task<IActionResult> Register([FromBody] UserIdentity userIdentity)
+    public async Task<IActionResult> Register([FromQuery] UserIdentity userIdentity)
     {
         UserIdentityValidator validator = new(_dbContext);
         ValidationResult validationResult = await validator.ValidateAsync(userIdentity);
@@ -92,7 +92,7 @@ public class UsersAuthenticationController : Controller
             _ = await _dbContext.Users.AddAsync(user);
             _ = await _dbContext.SaveChangesAsync();
 
-            return Ok(user);
+            return Ok();
         }
     }
 
@@ -115,7 +115,7 @@ public class UsersAuthenticationController : Controller
         User? user = await _dbContext.Users.FindAsync(nickname);
 
         if (user is null)
-            return NotFound($"Користувача з псевдонімом '{nickname}' не знайдено.");
+            return NotFound();
 
         UserUpdateRequestValidator validator = new();
         ValidationResult validationResult = await validator.ValidateAsync(userUpdateRequest);
@@ -131,7 +131,7 @@ public class UsersAuthenticationController : Controller
 
             _ = await _dbContext.SaveChangesAsync();
 
-            return Ok(user);
+            return Ok();
         }
     }
 

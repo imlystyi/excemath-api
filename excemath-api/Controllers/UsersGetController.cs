@@ -36,21 +36,22 @@ public class UsersGetController : Controller
 
     #region Методи
 
-    /// <summary>
-    /// Дозволяє отримати всіх користувачів у вигляді списку.
-    /// </summary>
-    /// <remarks>
-    /// Користувачі у списку повертаються як моделі запиту отримання <see cref="UserGetRequest"/>, які не мають властивості паролю (як <see cref="User.Password"/>).
-    /// </remarks>
-    /// <returns>
-    /// Список користувачів як список <see cref="List{UserGetRequest}"/> з елементів класу <see cref="UserGetRequest"/> (інтегрований у HTTP-відповідь <see cref="OkObjectResult"/>).
-    /// </returns>
-    [HttpGet]
-    [Route("get/all")]
-    public async Task<IActionResult> GetAllUsers() => Ok((await _dbContext.Users.ToListAsync()).ConvertAll(u => (UserGetRequest)u));
+    // TODO: видалити #4
+    ///// <summary>
+    ///// Дозволяє отримати всіх користувачів у вигляді списку.
+    ///// </summary>
+    ///// <remarks>
+    ///// Користувачі у списку повертаються як моделі запиту отримання <see cref="UserGetRequest"/>, які не мають властивості паролю (як <see cref="User.Password"/>).
+    ///// </remarks>
+    ///// <returns>
+    ///// Список користувачів як список <see cref="List{UserGetRequest}"/> з елементів класу <see cref="UserGetRequest"/> (інтегрований у HTTP-відповідь <see cref="OkObjectResult"/>).
+    ///// </returns>
+    //[HttpGet]
+    //[Route("all")]
+    //public async Task<IActionResult> GetAllUsers() => Ok((await _dbContext.Users.ToListAsync()).ConvertAll(u => (UserGetRequest)u));
 
     /// <summary>
-    /// Дозволяє отримати рейтинговий список всіх користувачів.
+    /// Дозволяє клієнту отримати рейтинговий список користувачів.
     /// </summary>
     /// <remarks>
     /// Користувачі у списку повертаються як анонимні типи, які мають такі члени, як псевдонім та рейтинг: <see langword="new"/> { <see cref="User.Nickname"/>, Rating }.<br>
@@ -61,23 +62,27 @@ public class UsersGetController : Controller
     /// Список користувачів як список <see cref="List{GetUserRequest}"/> з елементів анонімного класу (інтегрований у HTTP-відповідь <see cref="OkObjectResult"/>).
     /// </returns>
     [HttpGet]
-    [Route("get/rating_list")]
+    [Route("rating_list")]
     public async Task<IActionResult> GetRatingList()
     {
         List<User> users = await _dbContext.Users.ToListAsync();
 
         var ratingList = users.Select(u =>
         {
-            double rating = ((u.RightAnswers + u.WrongAnswers) > 0) ? ((double)u.RightAnswers / (u.RightAnswers + u.WrongAnswers)) : 0;
+            double rating = ((u.RightAnswers + u.WrongAnswers) > 0) ? ((double)u.RightAnswers * 100 / (u.RightAnswers + u.WrongAnswers)) : 0;
 
-            return new { u.Nickname, Rating = rating };
-        }).OrderByDescending(r => r.Rating).ToList();
+            return new UserRating
+            {
+                Nickname = u.Nickname,
+                Rating = rating
+            };
+        }).OrderByDescending(u => u.Rating).Select(u => Math.Round(u.Rating, 2)).ToList();
 
         return Ok(ratingList);
     }
 
     /// <summary>
-    /// Дозволяє отримати конкретного користувача за його псевдонімом.
+    /// Дозволяє клієнту отримати конкретного користувача за вказаним псевдонімом.
     /// </summary>
     /// <remarks>
     /// Користувач повертається як модель запиту отримання <see cref="UserGetRequest"/>, яка не має властивості паролю (як <see cref="User.Password"/>).
@@ -88,15 +93,20 @@ public class UsersGetController : Controller
     /// інакше, HTTP-відповідь <see cref="NotFoundObjectResult"/>.</br>
     /// </returns>
     [HttpGet]
-    [Route("get/{nickname}")]
+    [Route("nickname/{nickname}")]
     public async Task<IActionResult> GetUser([FromRoute] string nickname)
     {
         User? user = await _dbContext.Users.FindAsync(nickname);
 
         if (user is null)
-            return NotFound($"Користувача з псевдонімом '{nickname}' не знайдено.");
+            return NotFound();
 
-        return Ok((UserGetRequest)user);
+        return Ok(new UserGetRequest
+        {
+            Nickname = user.Nickname,
+            RightAnswers = user.RightAnswers,
+            WrongAnswers = user.WrongAnswers
+        });
     }
 
     #endregion

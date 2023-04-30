@@ -1,10 +1,4 @@
-﻿#region Usings-частина
-
-using System.ComponentModel.DataAnnotations.Schema;
-
-#endregion
-
-namespace excemathApi.Models;
+﻿namespace excemathApi.Models;
 
 /// <summary>
 /// Представляє модель математичної проблеми, яка має унікальний ідентифікатор, тип, умову, правильний розв'язок та загальну підказку.
@@ -22,7 +16,6 @@ public class MathProblem
     /// <returns>
     /// Унікальний ідентифікатор математичної проблеми як <see cref="int"/>. Є первинним ключом.
     /// </returns>
-    [DatabaseGenerated(DatabaseGeneratedOption.None)]
     public int Id { get; set; }
 
     /// <summary>
@@ -31,7 +24,6 @@ public class MathProblem
     /// <returns>
     /// Вид математичної проблеми як елемент перерахування <see cref="MathProblemKinds"/>.
     /// </returns>
-    [DatabaseGenerated(DatabaseGeneratedOption.None)]
     public MathProblemKinds Kind { get; set; }
 
     /// <summary>
@@ -50,43 +42,43 @@ public class MathProblem
     /// </returns>
     public string Answer { get; set; }
 
+    // TODO: видалити #5
     /// <summary>
     /// Повертає загальну підказку математичної проблеми.
     /// </summary>
     /// <returns>
-    /// Загальну підказку математичної проблеми як <see cref="string"/>.
+    /// Загальну підказку математичної проблеми як<see cref="string"/>.
     /// </returns>
-    public string Tip =>
-            // TODO: розписати підказки (використовуючи LaTeX).
-            Kind switch
-            {
-                MathProblemKinds.TableIntegral => "підказка для табличного інтеграла",
-                MathProblemKinds.MultipleIntegral => "підказка для кратного інтеграла",
-                MathProblemKinds.LineIntegral => "підказка для лінійного інтеграла",
+    //public string Tip =>
+    //        // TODO: розписати підказки (використовуючи LaTeX).
+    //        Kind switch
+    //        {
+    //            MathProblemKinds.TableIntegral => "",
+    //            MathProblemKinds.LineIntegral => "підказка для лінійного інтеграла",
 
-                MathProblemKinds.Matrix => "підказка для матриць",
-                MathProblemKinds.Limit => "підказка для границь",
+    //            MathProblemKinds.Matrix => "підказка для матриць",
+    //            MathProblemKinds.Limit => "підказка для границь",
 
-                MathProblemKinds.LinearEquation => "підказка для лінійних рівнянь",
-                MathProblemKinds.QuadraticEquation => "підказка для квадратних рівнянь",
-                MathProblemKinds.IrrationalEquation => "підказка для ірраціональних рівнянь",
-                MathProblemKinds.ExponentialEquation => "підказка для показникових рівнянь",
-                MathProblemKinds.LogarithmicEquation => "підказка для логарифмічних рівнянь",
-                MathProblemKinds.TrigonometricEquation => "підказка для тригонометричних рівнянь",
+    //            MathProblemKinds.LinearEquation => "підказка для лінійних рівнянь",
+    //            MathProblemKinds.QuadraticEquation => "підказка для квадратних рівнянь",
+    //            MathProblemKinds.IrrationalEquation => "підказка для ірраціональних рівнянь",
+    //            MathProblemKinds.ExponentialEquation => "підказка для показникових рівнянь",
+    //            MathProblemKinds.LogarithmicEquation => "підказка для логарифмічних рівнянь",
+    //            MathProblemKinds.TrigonometricEquation => "підказка для тригонометричних рівнянь",
 
-                MathProblemKinds.LinearInequality => "підказка для лінійних нерівностей ",
-                MathProblemKinds.QuadraticInequality => "підказка для квадратичних нерівностей ",
-                MathProblemKinds.IrrationalInequality => "підказка для ірраціональних нерівностей ",
-                MathProblemKinds.ExponentialInequality => "підказка для показникових нерівностей ",
-                MathProblemKinds.LogarithmicInequality => "підказка для логарифмічних нерівностей ",
-                MathProblemKinds.TrigonometricInequality => "підказка для тригонометричних нерівностей ",
+    //            MathProblemKinds.LinearInequality => "підказка для лінійних нерівностей ",
+    //            MathProblemKinds.QuadraticInequality => "підказка для квадратичних нерівностей ",
+    //            MathProblemKinds.IrrationalInequality => "підказка для ірраціональних нерівностей ",
+    //            MathProblemKinds.ExponentialInequality => "підказка для показникових нерівностей ",
+    //            MathProblemKinds.LogarithmicInequality => "підказка для логарифмічних нерівностей ",
+    //            MathProblemKinds.TrigonometricInequality => "підказка для тригонометричних нерівностей ",
 
-                MathProblemKinds.NumericalSequences => "підказка для числових послідовностях",
-                MathProblemKinds.Function => "підказка для функцій",
-                MathProblemKinds.Combinatorics => "підказка для комбінаторики",
+    //            MathProblemKinds.NumericalSequences => "підказка для числових послідовностях",
+    //            MathProblemKinds.Function => "підказка для функцій",
+    //            MathProblemKinds.Combinatorics => "підказка для комбінаторики",
 
-                _ => throw new ArgumentException("Некоректний вид математичної проблеми", nameof(Kind))
-            };
+    //            _ => throw new ArgumentException("Некоректний вид математичної проблеми", nameof(Kind))
+    //        };
 
     #endregion
 }

@@ -35,18 +35,19 @@ public class SolvedMathProblemsGetController : Controller
 
     #region Методи
 
-    /// <summary>
-    /// Дозволяє отримати всі розв'язані математичні проблеми у вигляді списку.
-    /// </summary>
-    /// <returns>
-    /// Список всіх розв'язаних математичних проблем як список <see cref="List{SolvedMathProblem}"/> з елементів класу <see cref="SolvedMathProblem"/> (інтегрований у HTTP-відповідь <see cref="OkObjectResult"/>).
-    /// </returns>
-    [HttpGet]
-    [Route("get/all")]
-    public async Task<IActionResult> GetAllSolvedMathProblems() => Ok(await _dbContext.SolvedMathProblems.ToListAsync());
+    // TODO: видалити #3
+    ///// <summary>
+    ///// Дозволяє отримати всі розв'язані математичні проблеми у вигляді списку.
+    ///// </summary>
+    ///// <returns>
+    ///// Список всіх розв'язаних математичних проблем як список <see cref="List{SolvedMathProblem}"/> з елементів класу <see cref="SolvedMathProblem"/> (інтегрований у HTTP-відповідь <see cref="OkObjectResult"/>).
+    ///// </returns>
+    //[HttpGet]
+    //[Route("get/all")]
+    //public async Task<IActionResult> GetAllSolvedMathProblems() => Ok(await _dbContext.SolvedMathProblems.ToListAsync());
 
     /// <summary>
-    /// Дозволяє отримати список розв'язаних математичних проблем за вказаним списком ідентифікаторів.
+    /// Дозволяє клієнту отримати список розв'язаних математичних проблем за вказаним списком ідентифікаторів.
     /// </summary>
     /// <param name="ids">Список ідентифікаторів розв'язаних математичних проблем.</param>
     /// <returns>
@@ -54,19 +55,19 @@ public class SolvedMathProblemsGetController : Controller
     /// інакше, HTTP-відповідь <see cref="NotFoundObjectResult"/>.</br>
     /// </returns>
     [HttpGet]
-    [Route("get/ids_list")]
+    [Route("ids_list")]
     public async Task<IActionResult> GetSolvedMathProblemsList([FromQuery] List<int> ids)
     {
         List<SolvedMathProblem> solvedMathProblems = await Task.Run(() => _dbContext.SolvedMathProblems.Where(p => ids.Contains(p.Id)).ToListAsync());
 
         if (!solvedMathProblems.Any())
-            return NotFound("За вказаними ідентифікаторами не знайдено жодної розв'язаної математичної проблеми.");
+            return NotFound();
 
         return Ok(solvedMathProblems);
     }
 
     /// <summary>
-    /// Дозволяє отримати список розв'язаних математичних проблем за вказаним видом.
+    /// Дозволяє клієнту отримати список розв'язаних математичних проблем за вказаним видом.
     /// </summary>
     /// <param name="kind">Вид математичної проблеми.</param>
     /// <returns>
@@ -74,19 +75,19 @@ public class SolvedMathProblemsGetController : Controller
     /// інакше, HTTP-відповідь <see cref="NotFoundObjectResult"/>.</br>
     /// </returns>
     [HttpGet]
-    [Route("get/kinds_list/{kind}")]
+    [Route("kinds_list/{kind}")]
     public async Task<IActionResult> GetSolvedMathProblemsList([FromRoute] MathProblemKinds kind)
     {
         List<SolvedMathProblem> solvedMathProblems = await Task.Run(() => _dbContext.SolvedMathProblems.Where(p => p.Kind == kind).ToListAsync());
 
         if (!solvedMathProblems.Any())
-            return NotFound("За вказаним видом не знайдено жодної розв'язаної математичної проблеми.");
+            return NotFound();
 
         return Ok(solvedMathProblems);
     }
 
     /// <summary>
-    /// Дозволяє отримати конкретну розв'язану математичну проблему за вказаним ідентифікатором.
+    /// Дозволяє клієнту отримати конкретну розв'язану математичну проблему за вказаним ідентифікатором.
     /// </summary>
     /// <param name="id">Ідентифікатор розв'язаної математичної проблеми.</param>
     /// <returns>
@@ -94,15 +95,15 @@ public class SolvedMathProblemsGetController : Controller
     /// інакше, HTTP-відповідь <see cref="NotFoundObjectResult"/>.</br>
     /// </returns>
     [HttpGet]
-    [Route("get/{id}")]
+    [Route("{id}")]
     public async Task<IActionResult> GetSolvedMathProblem([FromRoute] int id)
     {
-        SolvedMathProblem? solvetMathProblem = await _dbContext.SolvedMathProblems.FindAsync(id);
+        SolvedMathProblem? solvedMathProblem = await _dbContext.SolvedMathProblems.FindAsync(id);
 
-        if (solvetMathProblem is null)
-            return NotFound($"Розв'язану математичну проблему з ідентифікатором '{id}' не знайдено.");
+        if (solvedMathProblem is null)
+            return NotFound();
 
-        return Ok(solvetMathProblem);
+        return Ok(solvedMathProblem);
     }
 
     #endregion
