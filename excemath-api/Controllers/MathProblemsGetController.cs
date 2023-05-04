@@ -35,53 +35,43 @@ public class MathProblemsGetController : Controller
 
     // TODO: видалити #2
     ///// <summary>
-    ///// Дозволяє отримати всі математичні проблеми у вигляді списку.
+    ///// Дозволяє клієнту отримати список математичних проблем за вказаним списком ідентифікаторів.
     ///// </summary>
+    ///// <param name="ids">Список ідентифікаторів математичних проблем.</param>
     ///// <returns>
-    ///// Список математичних проблем як список <see cref="List{MathProblem}"/> з елементів класу <see cref="MathProblem"/> (інтегрований у HTTP-відповідь <see cref="OkObjectResult"/>).
+    ///// Якщо за ідентифікатором знайдено принаймні одну математичну проблему, то список знайдених математичних проблем як список <see cref="List{MathProblem}"/> з елементів класу <see cref="MathProblem"/> (інтегрований у HTTP-відповідь <see cref="OkObjectResult"/>);<br>
+    ///// інакше, HTTP-відповідь <see cref="NotFoundObjectResult"/>.</br>
     ///// </returns>
     //[HttpGet]
-    //[Route("all")]
-    //public async Task<IActionResult> GetAllMathProblems() => Ok(await _dbContext.MathProblems.ToListAsync());
+    //[Route("ids_list")]
+    //public async Task<IActionResult> GetMathProblemsList([FromRoute] List<int> ids)
+    //{
+    //    List<MathProblem> mathProblems = await Task.Run(() => _dbContext.MathProblems.Where(p => ids.Contains(p.Id)).ToListAsync());
+
+    //    if (!mathProblems.Any())
+    //        return NotFound();
+
+    //    return Ok(mathProblems);
+    //}
 
     /// <summary>
-    /// Дозволяє клієнту отримати список математичних проблем за вказаним списком ідентифікаторів.
-    /// </summary>
-    /// <param name="ids">Список ідентифікаторів математичних проблем.</param>
-    /// <returns>
-    /// Якщо за ідентифікатором знайдено принаймні одну математичну проблему, то список знайдених математичних проблем як список <see cref="List{MathProblem}"/> з елементів класу <see cref="MathProblem"/> (інтегрований у HTTP-відповідь <see cref="OkObjectResult"/>);<br>
-    /// інакше, HTTP-відповідь <see cref="NotFoundObjectResult"/>.</br>
-    /// </returns>
-    [HttpGet]
-    [Route("ids_list")]
-    public async Task<IActionResult> GetMathProblemsList([FromRoute] List<int> ids)
-    {
-        List<MathProblem> mathProblems = await Task.Run(() => _dbContext.MathProblems.Where(p => ids.Contains(p.Id)).ToListAsync());
-
-        if (!mathProblems.Any())
-            return NotFound();
-
-        return Ok(mathProblems);
-    }
-
-    /// <summary>
-    /// Дозволяє клієнту отримати список математичних проблем за вказаним видом.
+    /// Дозволяє клієнту отримати список ідентифікаторів математичних проблем за вказаним видом.
     /// </summary>
     /// <param name="kind">Вид математичної проблеми.</param>
     /// <returns>
-    /// Якщо за видом знайдено принаймні одну математичну проблему, то список знайдених математичних проблем як <see cref="List{MathProblem}"/> з елементів класу <see cref="MathProblem"/> (інтегрований у HTTP-відповідь <see cref="OkObjectResult"/>);<br>
+    /// Якщо за видом знайдено принаймні одну математичну проблему, то список знайдених ідентифікаторів математичних проблем як <see cref="List{T}"/> з <see cref="int"/> (інтегрований у HTTP-відповідь <see cref="OkObjectResult"/>);<br>
     /// інакше, HTTP-відповідь <see cref="NotFoundObjectResult"/>.</br>
     /// </returns>
     [HttpGet]
-    [Route("kinds_list/{kind}")]
-    public async Task<IActionResult> GetMathProblemsList([FromRoute] MathProblemKinds kind)
+    [Route("kind_list/{kind}")]
+    public async Task<IActionResult> GetMathProblemsIdsList([FromRoute] MathProblemKinds kind)
     {
-        List<MathProblem> mathProblems = await Task.Run(() => _dbContext.MathProblems.Where(p => p.Kind == kind).ToListAsync());
+        List<int> ids = await Task.Run(() => _dbContext.MathProblems.Where(p => p.Kind == kind).Select(p => p.Id).ToListAsync());
 
-        if (!mathProblems.Any())
+        if (!ids.Any())
             return NotFound();
 
-        return Ok(mathProblems);
+        return Ok(ids);
     }
 
     /// <summary>
