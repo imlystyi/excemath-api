@@ -3,7 +3,6 @@ using excemathApi.Models;
 
 namespace excemathApi.Validators;
 
-// TODO: додати перевірку на знаходження користувача у базі даних (замінити NotFound()).
 /// <summary>
 /// Представляє валідатор для класу моделі <see cref="UserUpdateRequest"/>.
 /// </summary>

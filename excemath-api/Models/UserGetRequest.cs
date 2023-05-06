@@ -17,17 +17,4 @@ public class UserGetRequest
     public int WrongAnswers { get; set; }
 
     #endregion
-
-    #region Перевизначені оператори
-
-    // TODO: видалити #1
-    // Дозволяє звести тип звичайної моделі користувача до моделі користувача запиту отримання.
-    //public static explicit operator UserGetRequest(User user) => new()
-    //{
-    //    Nickname = user.Nickname,
-    //    RightAnswers = user.RightAnswers,
-    //    WrongAnswers = user.WrongAnswers
-    //};
-
-    #endregion
 }

@@ -11,7 +11,6 @@ public class UserIdentityValidator : AbstractValidator<UserIdentity>
 {
     #region Поля
 
-    // Контекст бази даних.
     private readonly UsersApiDbContext _dbContext;
 
     #endregion

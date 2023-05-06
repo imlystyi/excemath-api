@@ -16,7 +16,6 @@ public class UsersGetController : Controller
 {
     #region Поля
 
-    // Контекст бази даних контролера.
     private readonly UsersApiDbContext _dbContext;
 
     #endregion
@@ -36,30 +35,15 @@ public class UsersGetController : Controller
 
     #region Методи
 
-    // TODO: видалити #4
-    ///// <summary>
-    ///// Дозволяє отримати всіх користувачів у вигляді списку.
-    ///// </summary>
-    ///// <remarks>
-    ///// Користувачі у списку повертаються як моделі запиту отримання <see cref="UserGetRequest"/>, які не мають властивості паролю (як <see cref="User.Password"/>).
-    ///// </remarks>
-    ///// <returns>
-    ///// Список користувачів як список <see cref="List{UserGetRequest}"/> з елементів класу <see cref="UserGetRequest"/> (інтегрований у HTTP-відповідь <see cref="OkObjectResult"/>).
-    ///// </returns>
-    //[HttpGet]
-    //[Route("all")]
-    //public async Task<IActionResult> GetAllUsers() => Ok((await _dbContext.Users.ToListAsync()).ConvertAll(u => (UserGetRequest)u));
-
     /// <summary>
     /// Дозволяє клієнту отримати рейтинговий список користувачів.
     /// </summary>
     /// <remarks>
-    /// Користувачі у списку повертаються як анонимні типи, які мають такі члени, як псевдонім та рейтинг: <see langword="new"/> { <see cref="User.Nickname"/>, Rating }.<br>
-    /// Рейтинг розраховується наступним чином:</br>        
+    /// Рейтинг обчислюється наступним чином:    
     /// <code>double rating = ((User.RightAnswers + User.WrongAnswers) > 0) ? ((double)User.RightAnswers / (User.RightAnswers + User.WrongAnswers)) : 0;</code>
     /// </remarks>
     /// <returns>
-    /// Список користувачів як список <see cref="List{GetUserRequest}"/> з елементів анонімного класу (інтегрований у HTTP-відповідь <see cref="OkObjectResult"/>).
+    /// Рейтинговий список користувачів як список <see cref="List{T}"/> з <see cref="UserRating"/> (інтегрований у HTTP-відповідь <see cref="OkObjectResult"/>).
     /// </returns>
     [HttpGet]
     [Route("rating_list")]
@@ -84,12 +68,9 @@ public class UsersGetController : Controller
     /// <summary>
     /// Дозволяє клієнту отримати конкретного користувача за вказаним псевдонімом.
     /// </summary>
-    /// <remarks>
-    /// Користувач повертається як модель запиту отримання <see cref="UserGetRequest"/>, яка не має властивості паролю (як <see cref="User.Password"/>).
-    /// </remarks>
     /// <param name="nickname">Псевдонім користувача.</param>
     /// <returns>
-    /// Якщо користувача з таким псевдонімом знайдено, конкретного користувача як <see cref="UserGetRequest"/> (інтегрований у HTTP-відповідь <see cref="OkObjectResult"/>);<br>
+    /// Якщо користувача з таким псевдонімом знайдено, конкретного користувача як <see cref="UserGetRequest"/> (інтегрованого у HTTP-відповідь <see cref="OkObjectResult"/>);<br>
     /// інакше, HTTP-відповідь <see cref="NotFoundObjectResult"/>.</br>
     /// </returns>
     [HttpGet]

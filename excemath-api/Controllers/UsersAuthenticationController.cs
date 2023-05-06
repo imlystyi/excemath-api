@@ -11,7 +11,7 @@ using excemathApi.Validators;
 namespace excemathApi.Controllers;
 
 /// <summary>
-/// Представляє контролер для контексту бази даних <see cref="UsersApiDbContext"/>, який дозволяє <b>додавати, оновлювати та обробляти</b> дані, а саме виконувати реєстрацію, зміну даних користувача та його авторизацію.
+/// Представляє контролер для контексту бази даних <see cref="UsersApiDbContext"/>, який дозволяє <b>додавати, оновлювати та обробляти</b> дані, а саме виконувати авторизацію, реєстрацію та зміну даних користувача.
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
@@ -19,10 +19,8 @@ public class UsersAuthenticationController : Controller
 {
     #region Поля
 
-    // Набір конфігурацій API.
     private readonly IConfiguration _configuration;
 
-    // Контекст бази даних контролера.
     private readonly UsersApiDbContext _dbContext;
 
     #endregion
@@ -48,8 +46,10 @@ public class UsersAuthenticationController : Controller
     /// Дозволяє клієнту отримати успішність авторизації користувача, визначивши її за вказаною моделлю ідентичності.
     /// </summary>
     /// <param name="userIdentity">Модель ідентичності користувача.</param>
-    /// <returns>Якщо авторизація пройшла успішно, <see langword="true"/> (інтегроване у HTTP-відповідь <see cref="OkObjectResult"/>);<br>
-    /// інакше, <see langword="false"/> (інтегроване у HTTP-відповідь <see cref="BadRequestObjectResult"/>).</br></returns>
+    /// <returns>
+    /// У випадку вдалої авторизації, HTTP-відповідь <see cref="OkObjectResult"/>;<br>
+    /// інакше HTTP-відповідь <see cref="BadRequestObjectResult"/>.</br>
+    /// </returns>
     [HttpPost]
     [Route("authorize")]
     public async Task<IActionResult> Authorize([FromQuery] UserIdentity userIdentity)
@@ -68,7 +68,7 @@ public class UsersAuthenticationController : Controller
     /// </summary>
     /// <param name="userIdentity">Модель ідентичності користувача.</param>
     /// <returns>
-    /// У випадку вдалої реєстрації користувача, модель користувача як <see cref="User"/> (інтегрована у відповідь <see cref="OkObjectResult"/>);<br>
+    /// У випадку вдалої реєстрації користувача, HTTP-відповідь <see cref="OkObjectResult"/>;<br>
     /// інакше, у випадку невдалої валідації, список проблем валідації як <see cref="ValidationResult.Errors"/> (інтегрований у HTTP-відповідь <see cref="BadRequestObjectResult"/>).</br>
     /// </returns>
     [HttpPost]
@@ -97,14 +97,14 @@ public class UsersAuthenticationController : Controller
     }
 
     /// <summary>
-    /// Дозволяє оновити дані користувача за його псевдонімом. 
+    /// Дозволяє оновити дані користувача за його псевдонімом, використовуючи модель запиту оновлення.
     /// </summary>
     /// <remarks>
     /// При оновленні даних користувача відбувається валідація моделі запиту оновлення <paramref name="updateUserRequest"/> за допомогою валідатора <see cref="UserUpdateRequestValidator"/>.
     /// </remarks>
     /// <param name="userUpdateRequest">Модель користувача запиту оновлення.</param>
     /// <returns>
-    /// 1. У випадку успішного оновлення даних, модель запиту оновлення користувача як <see cref="UserUpdateRequest"/> (інтегровану в HTTP-відповідь <see cref="OkObjectResult"/>).<br>
+    /// 1. У випадку успішного оновлення даних, HTTP-відповідь <see cref="OkObjectResult"/>.<br>
     /// 2. У випадку невдалого знаходження користувача, HTTP-відповідь <see cref="NotFoundObjectResult"/>.</br><br>
     /// 3. У випадку невдалої валідації, список помилок валідації як <see cref="ValidationResult.Errors"/> (інтегрований у HTTP-відповідь <see cref="BadRequestObjectResult"/>).</br>
     /// </returns>
@@ -141,8 +141,8 @@ public class UsersAuthenticationController : Controller
     // Зашифровує пароль.
     private string EncryptPassword(string password)
     {
-        byte[] key = Encoding.UTF8.GetBytes(_configuration["CodingKeys:Password"]!),
-            decipheredArray;
+        byte[] key = Encoding.UTF8.GetBytes(_configuration["CodingKeys:Password"]!);
+        byte[] decipheredArray;
 
         using Aes aes = Aes.Create();
         aes.Key = key;
@@ -168,8 +168,8 @@ public class UsersAuthenticationController : Controller
     // Розшифровує пароль.
     private string DecryptPassword(string password)
     {
-        byte[] key = Encoding.UTF8.GetBytes(_configuration["CodingKeys:Password"]!),
-            chipheredArray = Encoding.UTF8.GetBytes(password);
+        byte[] key = Encoding.UTF8.GetBytes(_configuration["CodingKeys:Password"]!);
+        byte[] chipheredArray = Encoding.UTF8.GetBytes(password);
 
         using Aes aes = Aes.Create();
         aes.Key = key;

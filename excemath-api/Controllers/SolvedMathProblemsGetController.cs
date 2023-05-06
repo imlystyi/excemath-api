@@ -16,9 +16,6 @@ public class SolvedMathProblemsGetController : Controller
 {
     #region Поля
 
-    /// <summary>
-    /// Контекст бази даних контролера.
-    /// </summary>
     private readonly SolvedMathProblemsApiDbContext _dbContext;
 
     #endregion
@@ -34,17 +31,6 @@ public class SolvedMathProblemsGetController : Controller
     #endregion
 
     #region Методи
-
-    // TODO: видалити #3
-    ///// <summary>
-    ///// Дозволяє отримати всі розв'язані математичні проблеми у вигляді списку.
-    ///// </summary>
-    ///// <returns>
-    ///// Список всіх розв'язаних математичних проблем як список <see cref="List{SolvedMathProblem}"/> з елементів класу <see cref="SolvedMathProblem"/> (інтегрований у HTTP-відповідь <see cref="OkObjectResult"/>).
-    ///// </returns>
-    //[HttpGet]
-    //[Route("get/all")]
-    //public async Task<IActionResult> GetAllSolvedMathProblems() => Ok(await _dbContext.SolvedMathProblems.ToListAsync());
 
     /// <summary>
     /// Дозволяє клієнту отримати список розв'язаних математичних проблем за вказаним списком ідентифікаторів.

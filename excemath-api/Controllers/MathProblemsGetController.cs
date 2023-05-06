@@ -16,7 +16,6 @@ public class MathProblemsGetController : Controller
 {
     #region Поля
 
-    // Контекст бази даних контролера.
     private readonly MathProblemsApiDbContext _dbContext;
 
     #endregion
@@ -32,27 +31,6 @@ public class MathProblemsGetController : Controller
     #endregion
 
     #region Методи
-
-    // TODO: видалити #2
-    ///// <summary>
-    ///// Дозволяє клієнту отримати список математичних проблем за вказаним списком ідентифікаторів.
-    ///// </summary>
-    ///// <param name="ids">Список ідентифікаторів математичних проблем.</param>
-    ///// <returns>
-    ///// Якщо за ідентифікатором знайдено принаймні одну математичну проблему, то список знайдених математичних проблем як список <see cref="List{MathProblem}"/> з елементів класу <see cref="MathProblem"/> (інтегрований у HTTP-відповідь <see cref="OkObjectResult"/>);<br>
-    ///// інакше, HTTP-відповідь <see cref="NotFoundObjectResult"/>.</br>
-    ///// </returns>
-    //[HttpGet]
-    //[Route("ids_list")]
-    //public async Task<IActionResult> GetMathProblemsList([FromRoute] List<int> ids)
-    //{
-    //    List<MathProblem> mathProblems = await Task.Run(() => _dbContext.MathProblems.Where(p => ids.Contains(p.Id)).ToListAsync());
-
-    //    if (!mathProblems.Any())
-    //        return NotFound();
-
-    //    return Ok(mathProblems);
-    //}
 
     /// <summary>
     /// Дозволяє клієнту отримати список ідентифікаторів математичних проблем за вказаним видом.
