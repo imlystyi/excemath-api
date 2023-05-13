@@ -1,11 +1,11 @@
-﻿using FluentValidation;
-using excemathApi.Data;
+﻿using excemathApi.Data;
 using excemathApi.Models;
+using FluentValidation;
 
 namespace excemathApi.Validators;
 
 /// <summary>
-/// Представляє валідатор для класу моделі <see cref="UserIdentity"/>.
+/// Представляє валідатор для об'єктів класу <see cref="UserIdentity"/>.
 /// </summary>
 public class UserIdentityValidator : AbstractValidator<UserIdentity>
 {
@@ -18,13 +18,8 @@ public class UserIdentityValidator : AbstractValidator<UserIdentity>
     #region Конструктори
 
     /// <summary>
-    /// Створює екземпляр класу <see cref="UserIdentityValidator"/>.
+    /// Створює екземпляр класу <see cref="UserIdentityValidator"/> із зазначеним контекстом бази даних.
     /// </summary>
-    /// <remarks>
-    /// Валідує такі дані: <br>
-    ///  1. <see cref="UserIdentity.Nickname"/>: на те, чи є пустим або <see langword="null"/>-рядком; на те, чи є користувач із таким псевдонімом у контексті бази даних <paramref name="dbContext"/>.</br><br>
-    ///  2. <see cref="UserIdentity.Password"/>: на те, чи є пустим або <see langword="null"/>-рядком.</br>
-    /// </remarks>
     /// <param name="dbContext">Контекст бази даних.</param>
     public UserIdentityValidator(UsersApiDbContext dbContext)
     {

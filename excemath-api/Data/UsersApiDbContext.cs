@@ -1,10 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using excemathApi.Models;
+﻿using excemathApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace excemathApi.Data;
 
 /// <summary>
-/// Представляє контекст бази даних, який забезпечує зв'язок між класом моделі математичної проблеми <see cref="User"/> і фізичною базою даних.
+/// Представляє контекст бази даних, який забезпечує зв'язок між об'єктами класу <see cref="User"/> і фізичною базою даних.
 /// </summary>
 public class UsersApiDbContext : DbContext
 {
@@ -25,9 +25,6 @@ public class UsersApiDbContext : DbContext
     /// <summary>
     /// Повертає або встановлює набір всіх сутностей у базі даних у контексті класу <see cref="User"/>.
     /// </summary>
-    /// <returns>
-    /// Набір всіх сутностей у базі даних у контексті класу <see cref="User"/> як <see cref="DbSet{TEntity}"/> з елементів класу <see cref="User"/>.
-    /// </returns>
     public DbSet<User> Users { get; set; }
 
     #endregion

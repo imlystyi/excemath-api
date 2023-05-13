@@ -1,14 +1,12 @@
-﻿#nullable enable
-
+﻿using excemathApi.Data;
+using excemathApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using excemathApi.Data;
-using excemathApi.Models;
 
 namespace excemathApi.Controllers;
 
 /// <summary>
-/// Представляє контролер для контексту бази даних <see cref="UsersApiDbContext"/>, який дозволяє <b>отримувати</b> дані.
+/// Представляє контролер для контексту бази даних <see cref="UsersApiDbContext"/>, який дозволяє надсилати запити отримання.
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
@@ -23,7 +21,7 @@ public class UsersGetController : Controller
     #region Конструктори
 
     /// <summary>
-    /// Створює екземпляр класу <see cref="UsersGetController"/>, використовуючи вказаний контекст бази даних. 
+    /// Створює екземпляр класу <see cref="UsersGetController"/>, використовуючи вказаний контекст бази даних.
     /// </summary>
     /// <param name="dbContext">Контекст бази даних.</param>
     public UsersGetController(UsersApiDbContext dbContext)
@@ -36,11 +34,13 @@ public class UsersGetController : Controller
     #region Методи
 
     /// <summary>
-    /// Дозволяє клієнту отримати рейтинговий список користувачів.
+    /// Дозволяє клієнту отримати рейтинговий список користувачів (об'єктів класу <see cref="UserRating"/>).
     /// </summary>
     /// <remarks>
     /// Рейтинг обчислюється наступним чином:    
-    /// <code>double rating = ((User.RightAnswers + User.WrongAnswers) > 0) ? ((double)User.RightAnswers / (User.RightAnswers + User.WrongAnswers)) : 0;</code>
+    /// <code>
+    /// double rating = ((User.RightAnswers + User.WrongAnswers) > 0) ? ((double)User.RightAnswers / (User.RightAnswers + User.WrongAnswers)) : 0;
+    /// </code>
     /// </remarks>
     /// <returns>
     /// Рейтинговий список користувачів як список <see cref="List{T}"/> з <see cref="UserRating"/> (інтегрований у HTTP-відповідь <see cref="OkObjectResult"/>).
@@ -51,7 +51,7 @@ public class UsersGetController : Controller
     {
         List<User> users = await _dbContext.Users.ToListAsync();
 
-        var ratingList = users.Select(u =>
+        List<UserRating> ratingList = users.Select(u =>
         {
             double rating = ((u.RightAnswers + u.WrongAnswers) > 0) ? ((double)u.RightAnswers * 100 / (u.RightAnswers + u.WrongAnswers)) : 0;
 
@@ -60,22 +60,24 @@ public class UsersGetController : Controller
                 Nickname = u.Nickname,
                 Rating = rating
             };
-        }).OrderByDescending(u => u.Rating).Select(u => Math.Round(u.Rating, 2)).ToList();
+        }).OrderByDescending(u => u.Rating).ToList();
+        ratingList.ForEach(u => u.Rating = Math.Round(u.Rating, 2));
 
         return Ok(ratingList);
     }
 
+#nullable enable
+
     /// <summary>
-    /// Дозволяє клієнту отримати конкретного користувача за вказаним псевдонімом.
+    /// Дозволяє клієнту отримати конкретний об'єкт класу <see cref="UserGetRequest"/> за вказаним псевдонімом.
     /// </summary>
     /// <param name="nickname">Псевдонім користувача.</param>
     /// <returns>
-    /// Якщо користувача з таким псевдонімом знайдено, конкретного користувача як <see cref="UserGetRequest"/> (інтегрованого у HTTP-відповідь <see cref="OkObjectResult"/>);<br>
-    /// інакше, HTTP-відповідь <see cref="NotFoundObjectResult"/>.</br>
+    /// Якщо об'єкт знайдено, його як <see cref="UserGetRequest"/> (інтегрований у HTTP-відповідь <see cref="OkObjectResult"/>); інакше, HTTP-відповідь <see cref="NotFoundObjectResult"/>.
     /// </returns>
     [HttpGet]
-    [Route("nickname/{nickname}")]
-    public async Task<IActionResult> GetUser([FromRoute] string nickname)
+    [Route("nickname")]
+    public async Task<IActionResult> GetUser([FromQuery] string nickname)
     {
         User? user = await _dbContext.Users.FindAsync(nickname);
 

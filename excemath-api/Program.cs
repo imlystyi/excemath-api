@@ -1,5 +1,5 @@
-using Microsoft.EntityFrameworkCore;
 using excemathApi.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace excemathApi;
 

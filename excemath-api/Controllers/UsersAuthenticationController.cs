@@ -1,12 +1,10 @@
-﻿#nullable enable
-
-using System.Text;
-using System.Security.Cryptography;
-using Microsoft.AspNetCore.Mvc;
-using FluentValidation.Results;
-using excemathApi.Data;
+﻿using excemathApi.Data;
 using excemathApi.Models;
 using excemathApi.Validators;
+using FluentValidation.Results;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace excemathApi.Controllers;
 
@@ -42,13 +40,14 @@ public class UsersAuthenticationController : Controller
 
     #region Методи
 
+#nullable enable
+
     /// <summary>
-    /// Дозволяє клієнту отримати успішність авторизації користувача, визначивши її за вказаною моделлю ідентичності.
+    /// Дозволяє клієнту отримати інформацію про успішність авторизації користувача, визначивши її за вказаною ідентичністю користувача (об'єктом класу <see cref="UserIdentity"/>).
     /// </summary>
-    /// <param name="userIdentity">Модель ідентичності користувача.</param>
+    /// <param name="userIdentity">Ідентичність користувача.</param>
     /// <returns>
-    /// У випадку вдалої авторизації, HTTP-відповідь <see cref="OkObjectResult"/>;<br>
-    /// інакше HTTP-відповідь <see cref="BadRequestObjectResult"/>.</br>
+    /// У випадку успішної авторизації, HTTP-відповідь <see cref="OkObjectResult"/>; інакше, HTTP-відповідь <see cref="BadRequestObjectResult"/>.
     /// </returns>
     [HttpPost]
     [Route("authorize")]
@@ -64,12 +63,51 @@ public class UsersAuthenticationController : Controller
     }
 
     /// <summary>
-    /// Дозволяє клієнту зареєструвати користувача за вказаною моделлю ідентичності (додати його в фізичну базу даних).
+    /// Дозволяє оновити дані користувача за його псевдонімом, використовуючи вказаного користувача для запиту оновлення (об'єкт класу <see cref="UserUpdateRequest"/>).
     /// </summary>
-    /// <param name="userIdentity">Модель ідентичності користувача.</param>
+    /// <remarks>
+    /// При оновленні даних користувача відбувається валідація моделі запиту оновлення <paramref name="updateUserRequest"/> за допомогою валідатора <see cref="UserUpdateRequestValidator"/>.
+    /// </remarks>
+    /// <param name="nickname">Псевдонім користувача.</param>
+    /// <param name="userUpdateRequest">Користувач для запиту оновлення.</param>
     /// <returns>
-    /// У випадку вдалої реєстрації користувача, HTTP-відповідь <see cref="OkObjectResult"/>;<br>
-    /// інакше, у випадку невдалої валідації, список проблем валідації як <see cref="ValidationResult.Errors"/> (інтегрований у HTTP-відповідь <see cref="BadRequestObjectResult"/>).</br>
+    /// У випадку успішного оновлення даних, HTTP-відповідь <see cref="OkObjectResult"/>; інакше, якщо користувача не було успішно знайдено, HTTP-відповідь <see cref="NotFoundObjectResult"/>; інакше, у випадку невдалої валідації, список помилок валідації як <see cref="ValidationResult.Errors"/> (інтегрований у HTTP-відповідь <see cref="BadRequestObjectResult"/>).
+    /// </returns>
+    [HttpPut]
+    [Route("update")]
+    public async Task<IActionResult> Update([FromQuery] string nickname, [FromQuery] UserUpdateRequest userUpdateRequest)
+    {
+        User? user = await _dbContext.Users.FindAsync(nickname);
+
+        if (user is null)
+            return NotFound();
+
+        UserUpdateRequestValidator validator = new();
+        ValidationResult validationResult = await validator.ValidateAsync(userUpdateRequest);
+
+        if (!validationResult.IsValid)
+            return BadRequest(validationResult.Errors);
+
+        else
+        {
+            user.Password = userUpdateRequest.Password;
+            user.RightAnswers = userUpdateRequest.RightAnswers;
+            user.WrongAnswers = userUpdateRequest.WrongAnswers;
+
+            _ = await _dbContext.SaveChangesAsync();
+
+            return Ok();
+        }
+    }
+
+#nullable restore
+
+    /// <summary>
+    /// Дозволяє клієнту зареєструвати користувача, використовуючи вказаного користувача для запиту оновлення (об'єкт класу <see cref="UserUpdateRequest"/>).
+    /// </summary>
+    /// <param name="userIdentity">Ідентичність користувача.</param>
+    /// <returns>
+    /// У випадку успішної реєстрації, HTTP-відповідь <see cref="OkObjectResult"/>; інакше, у випадку невдалої валідації, список проблем валідації як <see cref="ValidationResult.Errors"/> (інтегрований у HTTP-відповідь <see cref="BadRequestObjectResult"/>).
     /// </returns>
     [HttpPost]
     [Route("register")]
@@ -96,49 +134,8 @@ public class UsersAuthenticationController : Controller
         }
     }
 
-    /// <summary>
-    /// Дозволяє оновити дані користувача за його псевдонімом, використовуючи модель запиту оновлення.
-    /// </summary>
-    /// <remarks>
-    /// При оновленні даних користувача відбувається валідація моделі запиту оновлення <paramref name="updateUserRequest"/> за допомогою валідатора <see cref="UserUpdateRequestValidator"/>.
-    /// </remarks>
-    /// <param name="userUpdateRequest">Модель користувача запиту оновлення.</param>
-    /// <returns>
-    /// 1. У випадку успішного оновлення даних, HTTP-відповідь <see cref="OkObjectResult"/>.<br>
-    /// 2. У випадку невдалого знаходження користувача, HTTP-відповідь <see cref="NotFoundObjectResult"/>.</br><br>
-    /// 3. У випадку невдалої валідації, список помилок валідації як <see cref="ValidationResult.Errors"/> (інтегрований у HTTP-відповідь <see cref="BadRequestObjectResult"/>).</br>
-    /// </returns>
-    [HttpPut]
-    [Route("update/{nickname}")]
-    public async Task<IActionResult> Update([FromRoute] string nickname, UserUpdateRequest userUpdateRequest)
-    {
-        User? user = await _dbContext.Users.FindAsync(nickname);
+    // Ці методи шифрування використовують стандарт шифрування AES і виконуються за допомогою ключа, вказаного у appsetings.json (у "CodingKeys:Password").
 
-        if (user is null)
-            return NotFound();
-
-        UserUpdateRequestValidator validator = new();
-        ValidationResult validationResult = await validator.ValidateAsync(userUpdateRequest);
-
-        if (!validationResult.IsValid)
-            return BadRequest(validationResult.Errors);
-
-        else
-        {
-            user.Password = userUpdateRequest.Password;
-            user.RightAnswers = userUpdateRequest.RightAnswers;
-            user.WrongAnswers = userUpdateRequest.WrongAnswers;
-
-            _ = await _dbContext.SaveChangesAsync();
-
-            return Ok();
-        }
-    }
-
-    // Ці методи шифрування використовують стандарт шифрування AES і виконуються за допомогою ключа,
-    // вказаного у appsetings.json (у "CodingKeys:Password").
-
-    // Зашифровує пароль.
     private string EncryptPassword(string password)
     {
         byte[] key = Encoding.UTF8.GetBytes(_configuration["CodingKeys:Password"]!);
@@ -165,7 +162,6 @@ public class UsersAuthenticationController : Controller
         return Convert.ToBase64String(decipheredArray);
     }
 
-    // Розшифровує пароль.
     private string DecryptPassword(string password)
     {
         byte[] key = Encoding.UTF8.GetBytes(_configuration["CodingKeys:Password"]!);

@@ -1,9 +1,7 @@
-﻿#nullable enable
-
+﻿using excemathApi.Data;
+using excemathApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using excemathApi.Data;
-using excemathApi.Models;
 
 namespace excemathApi.Controllers;
 
@@ -23,7 +21,7 @@ public class SolvedMathProblemsGetController : Controller
     #region Конструктори
 
     /// <summary>
-    /// Створює екземпляр класу <see cref="SolvedMathProblemsGetController"/>, використовуючи зазначений контекст бази даних.
+    /// Створює екземпляр класу <see cref="SolvedMathProblemsGetController"/>, використовуючи вказаний контекст бази даних.
     /// </summary>
     /// <param name="dbContext">Контекст бази даних.</param>
     public SolvedMathProblemsGetController(SolvedMathProblemsApiDbContext dbContext) => _dbContext = dbContext;
@@ -33,36 +31,15 @@ public class SolvedMathProblemsGetController : Controller
     #region Методи
 
     /// <summary>
-    /// Дозволяє клієнту отримати список розв'язаних математичних проблем за вказаним списком ідентифікаторів.
+    /// Дозволяє клієнту отримати список ідентифікаторів об'єктів класу <see cref="SolvedMathProblem"/> за вказаним видом.
     /// </summary>
-    /// <param name="ids">Список ідентифікаторів розв'язаних математичних проблем.</param>
+    /// <param name="kind">Вид розв'язаної математичної задачі.</param>
     /// <returns>
-    /// Якщо за ідентифікатором знайдено принаймні одну розв'язану математичну проблему, то список знайдених розв'язаних математичних проблем як список <see cref="List{SolvedMathProblem}"/> з елементів класу <see cref="SolvedMathProblem"/> (інтегрований у HTTP-відповідь <see cref="OkObjectResult"/>);<br>
-    /// інакше, HTTP-відповідь <see cref="NotFoundObjectResult"/>.</br>
+    /// Якщо знайдено принаймні один об'єкт, то список знайдених ідентифікаторів як <see cref="List{T}"/> з <see cref="int"/> (інтегрований у HTTP-відповідь <see cref="OkObjectResult"/>); інакше, HTTP-відповідь <see cref="NotFoundObjectResult"/>.
     /// </returns>
     [HttpGet]
-    [Route("ids_list")]
-    public async Task<IActionResult> GetSolvedMathProblemsList([FromQuery] List<int> ids)
-    {
-        List<SolvedMathProblem> solvedMathProblems = await Task.Run(() => _dbContext.SolvedMathProblems.Where(p => ids.Contains(p.Id)).ToListAsync());
-
-        if (!solvedMathProblems.Any())
-            return NotFound();
-
-        return Ok(solvedMathProblems);
-    }
-
-    /// <summary>
-    /// Дозволяє клієнту отримати список розв'язаних математичних проблем за вказаним видом.
-    /// </summary>
-    /// <param name="kind">Вид математичної проблеми.</param>
-    /// <returns>
-    /// Якщо за видом знайдено принаймні одну розв'язану математичну проблему, то список знайдених розв'язаних математичних проблем як список <see cref="List{SolvedMathProblem}"/> з елементів класу <see cref="SolvedMathProblem"/> (інтегрований у HTTP-відповідь <see cref="OkObjectResult"/>);<br>
-    /// інакше, HTTP-відповідь <see cref="NotFoundObjectResult"/>.</br>
-    /// </returns>
-    [HttpGet]
-    [Route("kinds_list/{kind}")]
-    public async Task<IActionResult> GetSolvedMathProblemsList([FromRoute] MathProblemKinds kind)
+    [Route("kinds_list")]
+    public async Task<IActionResult> GetSolvedMathProblemsList([FromQuery] MathProblemKinds kind)
     {
         List<SolvedMathProblem> solvedMathProblems = await Task.Run(() => _dbContext.SolvedMathProblems.Where(p => p.Kind == kind).ToListAsync());
 
@@ -72,17 +49,18 @@ public class SolvedMathProblemsGetController : Controller
         return Ok(solvedMathProblems);
     }
 
+#nullable enable
+
     /// <summary>
-    /// Дозволяє клієнту отримати конкретну розв'язану математичну проблему за вказаним ідентифікатором.
+    /// Дозволяє клієнту отримати конкретний об'єкт класу <see cref="SolvedMathProblem"/> за вказаним ідентифікатором.
     /// </summary>
-    /// <param name="id">Ідентифікатор розв'язаної математичної проблеми.</param>
+    /// <param name="id">Ідентифікатор розв'язаної математичної задачі.</param>
     /// <returns>
-    /// Якщо розв'язану математичну проблему з таким ідентифікатором знайдено, конкретну розв'язану математичну проблему як <see cref="SolvedMathProblem"/> (інтегровану у HTTP-відповідь <see cref="OkObjectResult"/>);<br>
-    /// інакше, HTTP-відповідь <see cref="NotFoundObjectResult"/>.</br>
+    /// Якщо об'єкт знайдено, його як <see cref="SolvedMathProblem"/> (інтегрований у HTTP-відповідь <see cref="OkObjectResult"/>); інакше, HTTP-відповідь <see cref="NotFoundObjectResult"/>.
     /// </returns>
     [HttpGet]
-    [Route("{id}")]
-    public async Task<IActionResult> GetSolvedMathProblem([FromRoute] int id)
+    [Route("id")]
+    public async Task<IActionResult> GetSolvedMathProblem([FromQuery] int id)
     {
         SolvedMathProblem? solvedMathProblem = await _dbContext.SolvedMathProblems.FindAsync(id);
 

@@ -1,7 +1,7 @@
 ﻿namespace excemathApi.Models;
 
 /// <summary>
-/// Представляє перерахування можливих видів для моделі математичної проблеми <see cref="MathProblem"/> або <see cref="SolvedMathProblem"/> (<see cref="MathProblem.Kind"/> або <see cref="SolvedMathProblem.Kind"/>).
+/// Представляє перерахування можливих видів завдання для об'єктів класів <see cref="MathProblem"/> та <see cref="SolvedMathProblem"/>.
 /// </summary>
 public enum MathProblemKinds
 {

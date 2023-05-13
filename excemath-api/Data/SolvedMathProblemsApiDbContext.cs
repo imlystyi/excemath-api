@@ -1,14 +1,10 @@
-﻿#region Usings-частина
-
+﻿using excemathApi.Models;
 using Microsoft.EntityFrameworkCore;
-using excemathApi.Models;
-
-#endregion
 
 namespace excemathApi.Data;
 
 /// <summary>
-/// Представляє контролер для контексту бази даних <see cref="SolvedMathProblem"/>.
+/// Представляє контекст бази даних, який забезпечує зв'язок між об'єктами класу <see cref="SolvedMathProblem"/> і фізичною базою даних.
 /// </summary>
 public class SolvedMathProblemsApiDbContext : DbContext
 {
@@ -29,9 +25,6 @@ public class SolvedMathProblemsApiDbContext : DbContext
     /// <summary>
     /// Повертає або встановлює набір всіх сутностей у базі даних у контексті класу <see cref="SolvedMathProblem"/>.
     /// </summary>
-    /// <returns>
-    /// Набір всіх сутностей у базі даних у контексті класу <see cref="SolvedMathProblem"/> як <see cref="DbSet{TEntity}"/> з елементів класу <see cref="SolvedMathProblem"/>.
-    /// </returns>
     public DbSet<SolvedMathProblem> SolvedMathProblems { get; set; }
 
     #endregion
