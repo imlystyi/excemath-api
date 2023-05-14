@@ -63,7 +63,7 @@ public class UsersAuthenticationController : Controller
     }
 
     /// <summary>
-    /// Дозволяє оновити дані користувача за його псевдонімом, використовуючи вказаного користувача для запиту оновлення (об'єкт класу <see cref="UserUpdateRequest"/>).
+    /// Дозволяє клієнту оновити дані користувача за його псевдонімом, використовуючи вказаного користувача для запиту оновлення (об'єкт класу <see cref="UserUpdateRequest"/>).
     /// </summary>
     /// <remarks>
     /// При оновленні даних користувача відбувається валідація моделі запиту оновлення <paramref name="updateUserRequest"/> за допомогою валідатора <see cref="UserUpdateRequestValidator"/>.
@@ -103,7 +103,7 @@ public class UsersAuthenticationController : Controller
 #nullable restore
 
     /// <summary>
-    /// Дозволяє клієнту зареєструвати користувача, використовуючи вказаного користувача для запиту оновлення (об'єкт класу <see cref="UserUpdateRequest"/>).
+    /// Дозволяє клієнту зареєструвати користувача, використовуючи вказану ідентичність користувача (об'єкт класу <see cref="UserIdentity"/>).
     /// </summary>
     /// <param name="userIdentity">Ідентичність користувача.</param>
     /// <returns>
@@ -134,7 +134,7 @@ public class UsersAuthenticationController : Controller
         }
     }
 
-    // Ці методи шифрування використовують стандарт шифрування AES і виконуються за допомогою ключа, вказаного у appsetings.json (у "CodingKeys:Password").
+    // Ці методи шифрування паролю використовують стандарт шифрування AES і виконуються за допомогою ключа, вказаного у appsetings.json (у "CodingKeys:Password").
 
     private string EncryptPassword(string password)
     {
