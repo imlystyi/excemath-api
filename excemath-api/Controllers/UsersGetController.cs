@@ -76,8 +76,8 @@ public class UsersGetController : Controller
     /// Якщо об'єкт знайдено, його як <see cref="UserGetRequest"/> (інтегрований у HTTP-відповідь <see cref="OkObjectResult"/>); інакше, HTTP-відповідь <see cref="NotFoundObjectResult"/>.
     /// </returns>
     [HttpGet]
-    [Route("nickname")]
-    public async Task<IActionResult> GetUser([FromQuery] string nickname)
+    [Route("nickname/{nickname}")]
+    public async Task<IActionResult> GetUser([FromRoute] string nickname)
     {
         User? user = await _dbContext.Users.FindAsync(nickname);
 

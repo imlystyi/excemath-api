@@ -26,17 +26,17 @@ public class UserIdentityValidator : AbstractValidator<UserIdentity>
         _dbContext = dbContext;
 
         _ = RuleFor(user => user.Nickname)
-            .NotEmpty().WithMessage("Неправильний псевдонім.").WithErrorCode("01")
-            .NotNull().WithMessage("Неправильний псевдонім.").WithErrorCode("01")
+            .NotEmpty().WithMessage("Неправильний нікнейм!").WithErrorCode("01")
+            .NotNull().WithMessage("Неправильний нікнейм!").WithErrorCode("01")
             .MustAsync(async (nickname, cancellation) =>
             {
                 var exists = await _dbContext.Users.FindAsync(new object[] { nickname }, cancellation);
                 return !(exists is not null);
-            }).WithMessage("Користувач з таким псевдонімом вже існує.").WithErrorCode("02");
+            }).WithMessage("Користувач з таким нікнеймом вже існує!").WithErrorCode("02");
 
         RuleFor(user => user.Password)
-            .NotEmpty().WithMessage("Неправильний пароль.").WithErrorCode("03")
-            .NotNull().WithMessage("Неправильний пароль.").WithErrorCode("03");
+            .NotEmpty().WithMessage("Неправильний пароль!").WithErrorCode("03")
+            .NotNull().WithMessage("Неправильний пароль!").WithErrorCode("03");
     }
 
     #endregion
