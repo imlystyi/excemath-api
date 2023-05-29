@@ -98,10 +98,5 @@ public enum MathProblemKinds
     /// <summary>
     /// Представляє вид "Функції".
     /// </summary>
-    Function,
-
-    /// <summary>
-    /// Представляє вид "Комбінаторика".
-    /// </summary>
-    Combinatorics
+    Function
 }

@@ -55,7 +55,7 @@ public class UsersAuthenticationController : Controller
     {
         User? user = await _dbContext.Users.FindAsync(userIdentity.Nickname);
 
-        if (user is not null && DecryptPassword(user.Password) == userIdentity.Password)
+        if (user is not null && user.Password == EncryptPassword(userIdentity.Password))
             return Ok();
 
         else
@@ -90,7 +90,7 @@ public class UsersAuthenticationController : Controller
 
         else
         {
-            user.Password = userUpdateRequest.Password;
+            user.Password = EncryptPassword(userUpdateRequest.Password);
             user.RightAnswers = userUpdateRequest.RightAnswers;
             user.WrongAnswers = userUpdateRequest.WrongAnswers;
 
@@ -160,24 +160,6 @@ public class UsersAuthenticationController : Controller
         }
 
         return Convert.ToBase64String(decipheredArray);
-    }
-
-    private string DecryptPassword(string password)
-    {
-        byte[] key = Encoding.UTF8.GetBytes(_configuration["CodingKeys:Password"]!);
-        byte[] chipheredArray = Encoding.UTF8.GetBytes(password);
-
-        using Aes aes = Aes.Create();
-        aes.Key = key;
-        aes.IV = new byte[16];
-
-        ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
-
-        using MemoryStream ms = new(chipheredArray);
-        using CryptoStream cs = new(ms, decryptor, CryptoStreamMode.Read);
-        using StreamReader sr = new(cs);
-
-        return sr.ReadToEnd();
     }
 
     #endregion

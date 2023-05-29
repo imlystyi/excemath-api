@@ -41,12 +41,12 @@ public class SolvedMathProblemsGetController : Controller
     [Route("kinds_list")]
     public async Task<IActionResult> GetSolvedMathProblemsList([FromQuery] MathProblemKinds kind)
     {
-        List<SolvedMathProblem> solvedMathProblems = await Task.Run(() => _dbContext.SolvedMathProblems.Where(p => p.Kind == kind).ToListAsync());
+        List<int> ids = await Task.Run(() => _dbContext.SolvedMathProblems.Where(p => p.Kind == kind).Select(p => p.Id).ToListAsync());
 
-        if (!solvedMathProblems.Any())
+        if (!ids.Any())
             return NotFound();
 
-        return Ok(solvedMathProblems);
+        return Ok(ids);
     }
 
 #nullable enable

@@ -43,7 +43,7 @@ public class UsersGetController : Controller
     /// </code>
     /// </remarks>
     /// <returns>
-    /// Рейтинговий список користувачів як список <see cref="List{T}"/> з <see cref="UserRating"/> (інтегрований у HTTP-відповідь <see cref="OkObjectResult"/>).
+    /// Рейтинговий список користувачів як список <see cref="List{T}"/> розміром 10 елементів з <see cref="UserRating"/> (інтегрований у HTTP-відповідь <see cref="OkObjectResult"/>).
     /// </returns>
     [HttpGet]
     [Route("rating_list")]
@@ -63,6 +63,14 @@ public class UsersGetController : Controller
         }).OrderByDescending(u => u.Rating).ToList();
         ratingList.ForEach(u => u.Rating = Math.Round(u.Rating, 2));
 
+        int index = 10;        
+
+        if (ratingList.Count >= index)
+        {
+            int count = ratingList.Count - index;
+            ratingList.RemoveRange(index, count);
+        }            
+
         return Ok(ratingList);
     }
 
@@ -76,8 +84,8 @@ public class UsersGetController : Controller
     /// Якщо об'єкт знайдено, його як <see cref="UserGetRequest"/> (інтегрований у HTTP-відповідь <see cref="OkObjectResult"/>); інакше, HTTP-відповідь <see cref="NotFoundObjectResult"/>.
     /// </returns>
     [HttpGet]
-    [Route("nickname/{nickname}")]
-    public async Task<IActionResult> GetUser([FromRoute] string nickname)
+    [Route("nickname")]
+    public async Task<IActionResult> GetUser([FromQuery] string nickname)
     {
         User? user = await _dbContext.Users.FindAsync(nickname);
 
