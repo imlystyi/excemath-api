@@ -1,0 +1,40 @@
+﻿##			excemath API  Copyright (C) 2023  miu-miu enjoyers			##
+##				Validation rules of the StringValidator		            ##
+
+
+1. Password.
+		Password must not be an empty string or null: 
+	string.IsNullOrEmpty(password) must return false.
+	If this rule is violated, the validator will return an error 
+	with the code "P1".
+
+2. Nickname.
+	a.	Nickname must not be an empty string or null: 
+	string.IsNullOrEmpty(nickname) must return false.
+	If this rule is violated, the validator will return an error 
+	with the code "N1".
+	b.	Nickname must contain only Latin alphabet characters, numbers 
+	and an underscore.
+	Nickname must match this regular expression: 
+	"^[a-zA-Z0-9_]+$"
+	If this rule is violated, the validator will return an error 
+	with the code "N2".
+
+3. First name/last name/location (in this section - option).
+	a.	Option must not be an empty string or null:  
+	string.IsNullOrEmpty(option) must return false.
+	If this rule is violated, the validator will return an error 
+	with the code "N1".
+	b.	Option must contain only characters of the Latin alphabet, 
+	Cyrillic alphabet, numbers, brackets, apostrophes, periods, 
+	question marks, exclamation marks, slashes, and underscores.
+	Option must match this regular expression:
+	"^[a-zA-Z0-9_А-Яа-я()\\.?!']+$"
+	If this rule is violated, the validator will return an error 
+	with the code "N3".
+
+4. About.
+		About must not be an empty string or null: 
+	string.IsNullOrEmpty(about) must return false.
+	If this rule is violated, the validator will return an error 
+	with the code "S1".

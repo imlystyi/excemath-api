@@ -4,24 +4,25 @@ using System.Text.RegularExpressions;
 
 namespace excemathApi.Validators;
 
-// TODO: StringValidator class documentation.
-
 /// <summary>
-/// 
+/// Represents a validator to the <see cref="Student"/> class object properties, that represented by a <see cref="string"/>.
 /// </summary>
+/// <remarks>Validator rules are described in the file StringValidatorRules.txt</remarks>
 public partial class StringValidator : AbstractValidator<string>
 {
-#nullable enable
-
     #region Constructors
 
+    #nullable enable
+
     /// <summary>
-    /// 
+    /// Initializes a new instance of the <see cref="StringValidator"/> class.
     /// </summary>
-    /// <param name="propertyName"></param>
-    public StringValidator(string? propertyName)
+    /// <param name="propertyName">The name of the property to be validated; if nothing or null is entered, the string is validated as a password.</param>
+    public StringValidator(string? propertyName = null)
     {
-        if (propertyName is null)   // If propertyName is null, checking string as password.
+    #nullable restore
+
+        if (propertyName is null)   // If propertyName is null, validating string as a password.
         {
             _ = RuleFor(vv => vv)
                 .NotEmpty().NotNull().WithErrorCode("P1");
@@ -44,8 +45,6 @@ public partial class StringValidator : AbstractValidator<string>
     }
 
     #endregion
-
-#nullable restore
 
     #region Regular expressions
 
