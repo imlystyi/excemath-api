@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace excemathApi.Contexts;
 
+// TODO: StudentsDbContext class documentation.
+
 /// <summary>
 /// Represents a session with the database and be used to query and save entities of the <see cref="StudentDto"/> class.
 /// </summary>

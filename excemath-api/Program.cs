@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace excemathApi;
 
+// TODO: Program class documentation.
+
 public static class Program
 {
     private const string _CONNECTION_STRING_NAME = "excemathDb";

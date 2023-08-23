@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace excemathApi.Contexts;
 
+// TODO: MathProblemsDbContext class documentation.
+
 /// <summary>
 /// Represents a session with the database and be used to query and save entities of the <see cref="MathProblemDto"/> class.
 /// </summary>

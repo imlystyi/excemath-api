@@ -4,6 +4,8 @@ using System.Text.RegularExpressions;
 
 namespace excemathApi.Validators;
 
+// TODO: StringValidator class documentation.
+
 /// <summary>
 /// 
 /// </summary>
