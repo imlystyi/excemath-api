@@ -1,28 +1,28 @@
-using excemathApi.Data;
+using excemathApi.Contexts;
 using Microsoft.EntityFrameworkCore;
 
 namespace excemathApi;
 
-public class Program
+public static class Program
 {
+    private const string _CONNECTION_STRING_NAME = "excemathDb";
+
     public static void Main(string[] args)
     {
-        var builder = WebApplication.CreateBuilder(args);
+        WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-        _ = builder.Services.AddControllers();
+        string connectionString = builder.Configuration.GetConnectionString(_CONNECTION_STRING_NAME);
+
+        _ = builder.Services.AddControllers().AddNewtonsoftJson();
         _ = builder.Services.AddEndpointsApiExplorer();
         _ = builder.Services.AddSwaggerGen();
 
-        _ = builder.Services.AddDbContext<MathProblemsApiDbContext>(options =>
-        options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
-        _ = builder.Services.AddDbContext<UsersApiDbContext>(options =>
-        options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
-        _ = builder.Services.AddDbContext<SolvedMathProblemsApiDbContext>(options =>
-        options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+        _ = builder.Services.AddDbContext<MathProblemsDbContext>(options => options.UseNpgsql(connectionString));
+        _ = builder.Services.AddDbContext<StudentsDbContext>(options => options.UseNpgsql(connectionString));
 
         _ = builder.Services.AddAuthorization();
 
-        var app = builder.Build();
+        WebApplication app = builder.Build();
 
         if (app.Environment.IsDevelopment())
         {

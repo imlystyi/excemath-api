@@ -17,16 +17,27 @@
 namespace excemathApi.Models;
 
 /// <summary>
-/// Представляє користувача для запиту отримання, який має унікальний псевдонім, кількість правильних та неправильних відповідей.
+/// 
 /// </summary>
-public class UserGetRequest
+public enum MathProblemTypes
 {
-    /// <inheritdoc cref="User.Nickname"/>
-    public string Nickname { get; set; }
-
-    /// <inheritdoc cref="User.RightAnswers"/>
-    public int RightAnswers { get; set; }
-
-    /// <inheritdoc cref="User.WrongAnswers"/>
-    public int WrongAnswers { get; set; }
+    TableIntegral,
+    MultipleIntegral,
+    LineIntegral,
+    Matrix,
+    Limit,
+    LinearEquation,
+    QuadraticEquation,
+    IrrationalEquation,
+    ExponentialEquation,
+    LogarithmicEquation,
+    TrigonometricEquation,
+    LinearInequality,
+    QuadraticInequality,
+    IrrationalInequality,
+    ExponentialInequality,
+    LogarithmicInequality,
+    TrigonometricInequality,
+    NumericalSequences,
+    Function
 }

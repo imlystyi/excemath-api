@@ -1,52 +1,128 @@
-﻿/* excemath - an app for preparing for math exams.
-* Copyright (C) 2023 miu-miu enjoyers
-
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-
-* You should have received a copy of the GNU General Public License
-* along with this program. If not, see <https://www.gnu.org/licenses/>. */
-
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace excemathApi.Models;
+﻿namespace excemathApi.Models;
 
 /// <summary>
-/// Представляє математичну задачу, яка має унікальний ідентифікатор, вид, питання та правильну відповідь.
+/// Represents a math problem with the unique identifier, type, difficulty, question, answer options list and step-by-step solution.
 /// </summary>
-/// <remarks>
-/// Має первинний ключ <see cref="Id"/>.
-/// </remarks>
 public class MathProblem
 {
-    /// <summary>
-    /// Повертає або встановлює унікальний ідентифікатор поточної задачі.
-    /// </summary>
-    /// <remarks>
-    /// Є первинним ключом.
-    /// </remarks>
-    [DatabaseGenerated(DatabaseGeneratedOption.None)]
-    public int Id { get; set; }
+    #region Properties
 
     /// <summary>
-    /// Повертає або встановлює вид поточної задачі, який представлений елементом перерахування <see cref="MathProblemKinds"/>.
+    /// The math problem identifier.
     /// </summary>
-    public MathProblemKinds Kind { get; set; }
+    public Guid Id { get; set; }
 
     /// <summary>
-    /// Повертає або встановлює питання поточної задачі.
+    /// A math problem type.
     /// </summary>
-    public string Question { get; set; }
+    public MathProblemTypes Type { get; set; }
 
     /// <summary>
-    /// Повертає або встановлює правильну відповідь поточної задачі.
+    /// The math problem difficulty.
     /// </summary>
-    public string Answer { get; set; }
+    public int Difficulty { get; set; }
+
+    /// <summary>
+    /// The math problem question.
+    /// </summary>
+    public Exposition Question { get; set; }
+
+    /// <summary>
+    /// The answer options list.
+    /// </summary>
+    public List<Option> Options { get; set; }
+
+    /// <summary>
+    /// The index of the correct answer in the answer options list.
+    /// </summary>
+    public int Answer { get; set; }
+
+    #nullable enable
+
+    /// <summary>
+    /// The step-by-step solution of the math problem.
+    /// </summary>
+    public List<Exposition>? Solution { get; set; }
+
+    #endregion
+
+    #region Constructors
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MathProblem"/> class.
+    /// </summary>
+    public MathProblem() { }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MathProblem"/> class using an exist <see cref="MathProblemDto"/> class instance.
+    /// </summary>
+    /// <param name="dto">The Data Transfer Object from which the member values will be taken.</param>
+    public MathProblem(MathProblemDto dto)
+    {
+        this.Id = dto.Id;
+        this.Type = dto.Type;
+        this.Difficulty = dto.Difficulty;
+        this.Question = new(dto.QuestionNormalText, dto.QuestionLatex);
+        this.Options = GetOptions(dto.OptionsRenderAsLatexOrder, dto.OptionsNumberOrder,
+            dto.OptionsValueOrder);
+        this.Answer = dto.Answer;
+        this.Solution = GetSolution(dto.SolutionNormalTextsOrder, dto.SolutionLatexOrder);
+    }
+
+    #endregion
+
+    #region Methods
+
+    /// <summary>
+    /// Converts a current math problem model to its Data Transfer Object model.
+    /// </summary>
+    public MathProblemDto ToDto() => new()
+    {
+        Id = this.Id,
+        Type = this.Type,
+        Difficulty = this.Difficulty,
+        QuestionNormalText = this.Question.NormalText,
+        QuestionLatex = this.Question.Latex,
+        OptionsRenderAsLatexOrder = this.Options.ConvertAll(oo => oo.RenderAsLatex),
+        OptionsNumberOrder = this.Options.ConvertAll(oo => oo.Number),
+        OptionsValueOrder = this.Options.ConvertAll(oo => oo.Value),
+        Answer = this.Answer,
+        SolutionNormalTextsOrder = this.Solution?.Select(ss => ss.NormalText).ToList(),
+        SolutionLatexOrder = this.Solution?.Select(ss => ss.NormalText).ToList()
+    };
+
+    private static List<Option> GetOptions(IReadOnlyList<bool> renderAsLatexOrder, IReadOnlyList<int> numberOrder, IReadOnlyList<string> valueOrder)
+    {
+        int count;
+
+        if ((count = renderAsLatexOrder.Count) != numberOrder.Count || count != valueOrder.Count)
+            throw new ArgumentException("The orders must have the same length.");
+
+        List<Option> options = new();
+
+        for (int ii = 0; ii < count; ii++)
+            options.Add(new(renderAsLatexOrder[ii], numberOrder[ii], valueOrder[ii]));
+
+        return options;
+    }
+
+    private static List<Exposition>? GetSolution(List<string?>? normalTextsOrder, List<string?>? latexOrder)
+    {
+        if (normalTextsOrder is null || latexOrder is null)
+            return null;
+
+        int length;
+
+        if ((length = normalTextsOrder.Count) != latexOrder.Count)
+            throw new ArgumentException("The orders must have the same length.");
+
+        List<Exposition> solution = new();
+
+        for (int ii = 0; ii < length; ii++)
+            solution.Add(new(normalTextsOrder[ii], latexOrder[ii]));
+
+        return solution;
+    }
+
+    #endregion
 }
