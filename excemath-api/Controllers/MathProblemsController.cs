@@ -40,8 +40,8 @@ public class MathProblemsController : Controller
     /// <param name="id">Identifier of the sought entity.</param>
     /// <returns>If the entity was found, the <see cref="OkObjectResult"/> with the new <see cref="MathProblem"/> object (created from the DTO) as a content; otherwise, <see cref="NotFoundResult"/>.</returns>
     [HttpGet]
-    [Route("find")]
-    public async Task<IActionResult> Find([FromQuery] Guid id)
+    [Route("get/find_one")]
+    public async Task<IActionResult> FindOne([FromQuery] Guid id)
     {
         MathProblemDto? mathProblemDto = await _dbContext.MathProblems.FindAsync(id);
 
@@ -56,16 +56,16 @@ public class MathProblemsController : Controller
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="kind"></param>
+    /// <param name="type"></param>
     /// <param name="solvedIds"></param>
     /// <returns></returns>
 
     [HttpGet]
-    [Route("get_ids")]
-    public async Task<IActionResult> GetIds([FromQuery] MathProblemTypes kind, [FromQuery] List<Guid> solvedIds)
+    [Route("get/get_ids")]
+    public async Task<IActionResult> GetIds([FromQuery] MathProblemTypes type, [FromQuery] List<Guid> solvedIds)
     {
         List<Guid> ids = await _dbContext.MathProblems
-            .Where(mp => mp.Type == kind && !solvedIds.Contains(mp.Id))
+            .Where(mp => mp.Type == type && !solvedIds.Contains(mp.Id))
             .Select(mp => mp.Id)
             .ToListAsync();
 
@@ -85,7 +85,7 @@ public class MathProblemsController : Controller
     /// <param name="mathProblem">An object to be added.</param>
     /// <returns><see cref="OkResult"/> if the entity was added successfully; otherwise, <see cref="ConflictResult"/>.</returns>
     [HttpPost]
-    [Route("add")]
+    [Route("post/add")]
     public async Task<IActionResult> Add([FromBody] MathProblem mathProblem)
     {
         MathProblemDto mathProblemDto = mathProblem.ToDto();

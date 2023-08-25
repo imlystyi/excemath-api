@@ -2,6 +2,14 @@
   "dependencies": {
     "secrets1": {
       "type": "secrets.user"
+    },
+    "postgresql1": {
+      "ignored": "true",
+      "type": "postgresql"
+    },
+    "mssql1": {
+      "ignored": "true",
+      "type": "mssql"
     }
   }
 }

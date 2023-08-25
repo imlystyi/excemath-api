@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace excemathApi.Controllers;
 
 // TODO: StudentsController class documentation.
+// TODO: Test StudentsController methods.
 
 /// <summary>
 ///
@@ -39,7 +40,7 @@ public class StudentsController : Controller
     #region GET methods
 
     [HttpGet]
-    [Route("find_one")]
+    [Route("get/find_one")]
     public async Task<IActionResult> FindOne([FromQuery] string nickname)
     {
         StudentDto? dto = await _dbContext.Students.FirstOrDefaultAsync(ss => ss.Nickname == nickname);
@@ -48,7 +49,7 @@ public class StudentsController : Controller
     }
 
     [HttpGet]
-    [Route("find_list")]
+    [Route("get/find_list")]
     public async Task<IActionResult> FindList([FromQuery] string nickname)
     {
         List<StudentDto> dtos = await _dbContext.Students.Where(ss => ss.Nickname.Contains(nickname)).ToListAsync();
@@ -57,7 +58,7 @@ public class StudentsController : Controller
     }
 
     [HttpGet]
-    [Route("get_top_list")]
+    [Route("get/get_top_list")]
     public async Task<IActionResult> GetTopList()
     {
         List<StudentDto> dtos = await _dbContext.Students.OrderByDescending(ss => ss.Experience).Take(_TOP_LIST_COUNT).ToListAsync();
@@ -65,12 +66,25 @@ public class StudentsController : Controller
         return Ok(dtos.ConvertAll(dto => new Student(dto)));
     }
 
+    [HttpGet]
+    [Route("get/validate_password")]
+    public async Task<IActionResult> ValidatePassword([FromQuery] string password)
+    {
+        StringValidator validator = new();
+        ValidationResult result = await validator.ValidateAsync(password);
+
+        if (result.IsValid)
+            return Ok();
+
+        return BadRequest(result.Errors.ConvertAll(ee => ee.ErrorCode));
+    }
+
     #endregion
 
     #region POST methods
 
     [HttpPost]
-    [Route("add")]
+    [Route("post/add")]
     public async Task<IActionResult> Add([FromQuery] Guid id, [FromQuery] string nickname)
     {
         StudentDto dto = new()
@@ -93,7 +107,7 @@ public class StudentsController : Controller
     #region PUT methods
 
     [HttpPut]
-    [Route("increase_solved_math_problems")]
+    [Route("put/increase_solved_math_problems")]
     public async Task<IActionResult> IncreaseSolvedMathProblems([FromQuery] Guid studentId, [FromQuery] Guid mathProblemId, [FromQuery] int difficulty, [FromQuery] MathProblemTypes type)    
     {
         StudentDto? dto = await _dbContext.Students.FindAsync(studentId);
@@ -113,7 +127,7 @@ public class StudentsController : Controller
     }
 
     [HttpPut]
-    [Route("increase_incorrect_answers")]
+    [Route("put/increase_incorrect_answers")]
     public async Task<IActionResult> IncreaseIncorrectAnswers([FromQuery] Guid id, [FromQuery] MathProblemTypes type)
     {
         StudentDto? dto = await _dbContext.Students.FindAsync(id);
@@ -131,7 +145,7 @@ public class StudentsController : Controller
     }
 
     [HttpPut]
-    [Route("update_nickname")]
+    [Route("put/update_nickname")]
     public async Task<IActionResult> UpdateNickname([FromQuery] Guid id, [FromQuery] string nickname)
     {
         StudentDto? student = await _dbContext.Students.FindAsync(id);
@@ -155,7 +169,7 @@ public class StudentsController : Controller
     }
 
     [HttpPut]
-    [Route("update_first_name")]
+    [Route("put/update_first_name")]
     public async Task<IActionResult> UpdateFirstName([FromQuery] Guid id, [FromQuery] string firstName)
     {
         StudentDto? student = await _dbContext.Students.FindAsync(id);
@@ -179,7 +193,7 @@ public class StudentsController : Controller
     }
 
     [HttpPut]
-    [Route("update_last_name")]
+    [Route("put/update_last_name")]
     public async Task<IActionResult> UpdateLastName([FromQuery] Guid id, [FromQuery] string lastName)
     {
         StudentDto? student = await _dbContext.Students.FindAsync(id);
@@ -203,7 +217,7 @@ public class StudentsController : Controller
     }
 
     [HttpPut]
-    [Route("update_location")]
+    [Route("put/update_location")]
     public async Task<IActionResult> UpdateLocation([FromQuery] Guid id, [FromQuery] string location)
     {
         StudentDto? student = await _dbContext.Students.FindAsync(id);
@@ -226,7 +240,7 @@ public class StudentsController : Controller
     }
 
     [HttpPut]
-    [Route("update_about")]
+    [Route("put/update_about")]
     public async Task<IActionResult> UpdateAbout([FromQuery] Guid id, [FromQuery] string about)
     {
         StudentDto? student = await _dbContext.Students.FindAsync(id);

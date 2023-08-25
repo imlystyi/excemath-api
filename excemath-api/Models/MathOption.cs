@@ -8,21 +8,21 @@ public class MathOption
     #region Properties
 
     /// <summary>
-    /// Defines whether to render the answer option as LaTeX.
+    /// Gets or sets whether to render the answer option as LaTeX.
     /// </summary>
     public bool RenderAsLatex { get; set; }
 
     /// <summary>
-    /// The index of the answer option in the answer options list.
+    /// Gets or sets the index of the answer option in the answer options list.
     /// </summary>
     public int Index { get; set; }
 
-    #endregion
-
     /// <summary>
-    /// The content of the option.
+    /// Gets or sets the content of the option.
     /// </summary>
     public string Content { get; set; }
+
+    #endregion
 
     #region Constructors
 

@@ -8,39 +8,39 @@ public class MathProblem
     #region Properties
 
     /// <summary>
-    /// The unique math problem identifier.
+    /// Gets or sets the unique math problem identifier.
     /// </summary>
     public Guid Id { get; set; }
 
     /// <summary>
-    /// A math problem type.
+    /// Gets or sets a math problem type.
     /// </summary>
     public MathProblemTypes Type { get; set; }
 
     /// <summary>
-    /// The math problem difficulty.
+    /// Gets or sets the math problem difficulty.
     /// </summary>
     public int Difficulty { get; set; }
 
     /// <summary>
-    /// The math problem question.
+    /// Gets or sets the math problem question.
     /// </summary>
     public MathExposition Question { get; set; }
 
     /// <summary>
-    /// The answer options list.
+    /// Gets or sets the answer options list.
     /// </summary>
     public List<MathOption> Options { get; set; }
 
     /// <summary>
-    /// The index of the correct answer in the answer options list.
+    /// Gets or sets the index of the correct answer in the answer options list.
     /// </summary>
-    public int Answer { get; set; }
+    public int AnswerIndex { get; set; }
 
     #nullable enable
 
     /// <summary>
-    /// The step-by-step solution of the math problem.
+    /// Gets or sets the step-by-step solution of the math problem.
     /// </summary>
     public List<MathExposition>? Solution { get; set; }
 
@@ -64,7 +64,7 @@ public class MathProblem
         this.Difficulty = dto.Difficulty;
         this.Question = new(dto.QuestionNormalText, dto.QuestionLatex);
         this.Options = GetOptions(dto.OptionsRenderAsLatexOrder, dto.OptionsIndexOrder, dto.OptionsContentOrder);
-        this.Answer = dto.Answer;
+        this.AnswerIndex = dto.AnswerIndex;
         this.Solution = GetSolution(dto.SolutionNormalTextsOrder, dto.SolutionLatexOrder);
     }
 
@@ -85,9 +85,9 @@ public class MathProblem
         OptionsRenderAsLatexOrder = this.Options.ConvertAll(oo => oo.RenderAsLatex),
         OptionsIndexOrder = this.Options.ConvertAll(oo => oo.Index),
         OptionsContentOrder = this.Options.ConvertAll(oo => oo.Content),
-        Answer = this.Answer,
-        SolutionNormalTextsOrder = this.Solution?.Select(ss => ss.NormalText).ToList(),
-        SolutionLatexOrder = this.Solution?.Select(ss => ss.NormalText).ToList()
+        AnswerIndex = this.AnswerIndex,
+        SolutionNormalTextsOrder = this.Solution?.ConvertAll(ss => ss.NormalText),
+        SolutionLatexOrder = this.Solution?.ConvertAll(ss => ss.Latex)
     };
 
     private static List<MathOption> GetOptions(IReadOnlyList<bool> renderAsLatexOrder, IReadOnlyList<int> numberOrder, IReadOnlyList<string> valueOrder)

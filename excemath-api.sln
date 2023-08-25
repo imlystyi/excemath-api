@@ -5,6 +5,8 @@ VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "excemath-api", "excemath-api\excemath-api.csproj", "{42001C4C-C186-453A-B9B1-77CFAD9029F0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "excemath-api-unit-tests", "excemath-api-unit-tests\excemath-api-unit-tests.csproj", "{C0E40859-A56B-42DA-94A0-ABEEE314F818}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{42001C4C-C186-453A-B9B1-77CFAD9029F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42001C4C-C186-453A-B9B1-77CFAD9029F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42001C4C-C186-453A-B9B1-77CFAD9029F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0E40859-A56B-42DA-94A0-ABEEE314F818}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0E40859-A56B-42DA-94A0-ABEEE314F818}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0E40859-A56B-42DA-94A0-ABEEE314F818}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0E40859-A56B-42DA-94A0-ABEEE314F818}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

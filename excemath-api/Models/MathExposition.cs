@@ -10,12 +10,12 @@ public class MathExposition
     #region Properties
 
     /// <summary>
-    /// A normal text part.
+    /// Gets or sets a normal text part.
     /// </summary>
     public string? NormalText { get; set; }
 
     /// <summary>
-    /// A LaTeX part.
+    /// Gets or sets a LaTeX part.
     /// </summary>
     public string? Latex { get; set; }
 

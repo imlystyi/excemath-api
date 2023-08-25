@@ -31,12 +31,12 @@ public class StudentDto
     public int Experience { get; set; }
 
     /// <summary>
-    /// The order of the correct answers in the <see cref="Student.CorrectAnswers"/> property.
+    /// Gets or sets the order of the correct answers in the <see cref="Student.CorrectAnswers"/> property.
     /// </summary>
     public List<int> CorrectAnswersOrder { get; set; } = Enumerable.Repeat(0, Enum.GetValues(typeof(MathProblemTypes)).Length).ToList();
 
     /// <summary>
-    /// The order of the incorrect answers in the <see cref="Student.IncorrectAnswers"/> property.
+    /// Gets or sets the order of the incorrect answers in the <see cref="Student.IncorrectAnswers"/> property.
     /// </summary>
     public List<int> IncorrectAnswersOrder { get; set; } = Enumerable.Repeat(0, Enum.GetValues(typeof(MathProblemTypes)).Length).ToList();
 

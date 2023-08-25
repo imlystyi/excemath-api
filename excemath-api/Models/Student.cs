@@ -1,7 +1,5 @@
 ﻿namespace excemathApi.Models;
 
-// TODO: Student class documentation.
-
 /// <summary>
 /// Represents an ordinary user as a student with the personal information and achievements.
 /// </summary>
@@ -10,52 +8,52 @@ public class Student
     #region Properties
 
     /// <summary>
-    /// The unique student identifier.
+    /// Gets or sets the unique student identifier.
     /// </summary>
     public Guid Id { get; set; }
 
     /// <summary>
-    /// The student's nickname.
+    /// Gets or sets the student's nickname.
     /// </summary>
     public string Nickname { get; set; }
 
     /// <summary>
-    /// The student's first name.
+    /// Gets or sets the student's first name.
     /// </summary>
     public string FirstName { get; set; }
 
     /// <summary>
-    /// The student's last name.
+    /// Gets or sets the student's last name.
     /// </summary>
     public string LastName { get; set; }
 
     /// <summary>
-    /// The list of identifiers of problems solved by the student.
+    /// Gets or sets the list of identifiers of math problems solved by the student.
     /// </summary>
     public List<Guid> SolvedMathProblems { get; set; }
 
     /// <summary>
-    /// The student's experience.
+    /// Gets or sets the student's experience.
     /// </summary>
     public int Experience { get; set; }
 
     /// <summary>
-    /// The number of correct answers to problems of each type.
+    /// Gets or sets the number of correct answers to math problems of each type.
     /// </summary>
     public Dictionary<MathProblemTypes, int> CorrectAnswers { get; set; } = new();
 
     /// <summary>
-    /// The number of incorrect answers to problems of each type.
+    /// Gets or sets the number of incorrect answers to math problems of each type.
     /// </summary>
     public Dictionary<MathProblemTypes, int> IncorrectAnswers { get; set; } = new();
 
     /// <summary>
-    /// The student's location.
+    /// Gets or sets the student's location.
     /// </summary>
     public string Location { get; set; }
 
     /// <summary>
-    /// The student's about.
+    /// Gets or sets the student's about.
     /// </summary>
     public string About { get; set; }
 
