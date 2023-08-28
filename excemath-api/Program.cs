@@ -3,12 +3,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace excemathApi;
 
-// TODO: Program class documentation.
-
+/// <summary>
+/// Represents the entry point of the program.
+/// </summary>
 public static class Program
 {
     private const string _CONNECTION_STRING_NAME = "excemathDb";
 
+    /// <summary>
+    /// Builds a program.
+    /// </summary>
+    /// <param name="args">Line arguments.</param>
     public static void Main(string[] args)
     {
         WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
