@@ -2,19 +2,20 @@
 using excemathApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using static excemathApi.Controllers.ControllerResults;
 
 namespace excemathApi.Controllers;
 
-// TODO: MathProblemsController class documentation.
-
 /// <summary>
-/// 
+/// Represents a controller that interacts with entities of the <see cref="MathProblem"/> and <see cref="MathProblemDto"/> types.
 /// </summary>
 [ApiController]
 [Route("api/math_problems")]
 public class MathProblemsController : Controller
 {
     #region Fields
+
+    private const string _MATH_PROBLEMS_CONTROLLER_ERROR_HEADER = "MathProblemsController error ";
 
     private readonly MathProblemsDbContext _dbContext;
 
@@ -23,56 +24,69 @@ public class MathProblemsController : Controller
     #region Constructors
 
     /// <summary>
-    /// 
+    /// Creates a new instance of the <see cref="MathProblemsController"/> class with the specified database context.
     /// </summary>
-    /// <param name="dbContext"></param>
+    /// <param name="dbContext">Database context.</param>
     public MathProblemsController(MathProblemsDbContext dbContext) => _dbContext = dbContext;
 
     #endregion
 
     #region GET methods
 
-    #nullable enable 
+    #nullable enable
 
     /// <summary>
-    /// Asynchronously finds a <see cref="MathProblemDto"/> entity in the database by its identifier.
+    /// Asynchronously finds a math problem in the database by its identifier and returns it.
     /// </summary>
-    /// <param name="id">Identifier of the sought entity.</param>
-    /// <returns>If the entity was found, the <see cref="OkObjectResult"/> with the new <see cref="MathProblem"/> object (created from the DTO) as a content; otherwise, <see cref="NotFoundResult"/>.</returns>
+    /// <param name="id">Math problem identifier.</param>
+    /// <returns>If the math problem is found, an <see cref="OkObjectResult"/> with a <see cref="MathProblem"/> object as a content; otherwise, <see cref="NotFoundResult"/>.<br>
+    /// If an exception occurs during operations, returns <see cref="InternalServerErrorObjectResult"/> with this exception as content.</br></returns>
     [HttpGet]
     [Route("get/find_one")]
-    public async Task<IActionResult> FindOne([FromQuery] Guid id)
+    public async Task<IActionResult> FindOneAsync([FromQuery] Guid id)
     {
-        MathProblemDto? mathProblemDto = await _dbContext.MathProblems.FindAsync(id);
+        try
+        {
+            MathProblemDto? dto = await _dbContext.MathProblems.FindAsync(id);
 
-        if (mathProblemDto is null)
-            return NotFound();
-
-        return Ok(new MathProblem(mathProblemDto));
+            return dto is null
+                ? NotFound()
+                : Ok(new MathProblem(dto));
+        }
+        catch (Exception ex)
+        {
+            return InternalServerError(ex);
+        }
     }
 
     #nullable restore
 
     /// <summary>
-    /// 
+    /// Asynchronously finds a list of math problem identifiers of the specified type in the database, excluding solved math problem identifiers, and returns it.
     /// </summary>
-    /// <param name="type"></param>
-    /// <param name="solvedIds"></param>
-    /// <returns></returns>
-
+    /// <param name="type">Sought math problem type.</param>
+    /// <param name="solvedIds">Solved math problem identifiers list.</param>
+    /// <returns>An <see cref="OkObjectResult"/> with list of identifiers as <see cref="List{T}"/> from <see cref="Guid"/> objects as content if at least one identifier is found; otherwise, <see cref="NotFoundResult"/>.<br>
+    /// If an exception occurs during operations, returns <see cref="InternalServerErrorObjectResult"/> with this exception as content.</br></returns>
     [HttpGet]
-    [Route("get/get_ids")]
-    public async Task<IActionResult> GetIds([FromQuery] MathProblemTypes type, [FromQuery] List<Guid> solvedIds)
+    [Route("get/find_ids")]
+    public async Task<IActionResult> FindIdsAsync([FromQuery] MathProblemTypes type, [FromQuery] List<Guid> solvedIds)
     {
-        List<Guid> ids = await _dbContext.MathProblems
-            .Where(mp => mp.Type == type && !solvedIds.Contains(mp.Id))
-            .Select(mp => mp.Id)
-            .ToListAsync();
+        try
+        {
+            List<Guid> ids = await _dbContext.MathProblems
+                .Where(pp => pp.Type == type && !solvedIds.Contains(pp.Id))
+                .Select(pp => pp.Id)
+                .ToListAsync();
 
-        if (!ids.Any())
-            return NotFound();
-
-        return Ok(ids);
+            return !ids.Any()
+                ? NotFound()
+                : Ok(ids);
+        }
+        catch (Exception ex)
+        {
+            return InternalServerError(ex);
+        }
     }
 
     #endregion
@@ -80,23 +94,31 @@ public class MathProblemsController : Controller
     #region POST methods
 
     /// <summary>
-    /// Asynchronously adds a <see cref="MathProblem"/> object as an entity to the database.
+    /// Asynchronously adds a math problem to the database.
     /// </summary>
-    /// <param name="mathProblem">An object to be added.</param>
-    /// <returns><see cref="OkResult"/> if the entity was added successfully; otherwise, <see cref="ConflictResult"/>.</returns>
+    /// <param name="problem">The object to convert to a Data Transfer Object and add.</param>
+    /// <returns>An <see cref="OkResult"/> if the math problem is added successfully; otherwise, if there are no entries while saving changes to the database, <see cref="InternalServerErrorObjectResult"/> with the error text as content.<br>
+    /// If an exception occurs during operations, returns <see cref="InternalServerErrorObjectResult"/> with this exception as content.</br></returns>
     [HttpPost]
     [Route("post/add")]
-    public async Task<IActionResult> Add([FromBody] MathProblem mathProblem)
+    public async Task<IActionResult> AddAsync([FromBody] MathProblem problem)
     {
-        MathProblemDto mathProblemDto = mathProblem.ToDto();
+        try
+        {
+            MathProblemDto dto = problem.ToDto();
 
-        _ = await _dbContext.AddAsync(mathProblemDto);
-        int entries = await _dbContext.SaveChangesAsync();
+            _ = await _dbContext.AddAsync(dto);
+            int entries = await _dbContext.SaveChangesAsync();
 
-        if (entries > 0)
-            return Ok();
-
-        return Conflict();
+            return entries > 0
+                ? Ok()
+                : InternalServerError(_MATH_PROBLEMS_CONTROLLER_ERROR_HEADER +
+                                      $"({nameof(AddAsync)} method): no \"{nameof(entries)}\" while saving changes.");
+        }
+        catch (Exception ex)
+        {
+            return InternalServerError(ex);
+        }
     }
 
     #endregion

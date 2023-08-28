@@ -28,14 +28,14 @@ public class MathProblemDto
     /// <remarks>Required.</remarks>
     public required string QuestionNormalText { get; set; }
 
-#nullable enable 
+    #nullable enable
 
     /// <summary>
     /// Gets or sets a LaTeX part in the math problem question.
     /// </summary>
     public string? QuestionLatex { get; set; }
 
-#nullable restore
+    #nullable restore
 
     /// <summary>
     /// Gets or sets the order of the <see cref="MathOption.RenderAsLatex"/> property values of the options.
@@ -58,7 +58,7 @@ public class MathProblemDto
     /// <inheritdoc cref="MathProblem.AnswerIndex"/>
     public required int AnswerIndex { get; set; }
 
-#nullable enable
+    #nullable enable
 
     /// <summary>
     /// Gets or sets the order of the <see cref="MathExposition.NormalText"/> property values of the step-by-step solution.

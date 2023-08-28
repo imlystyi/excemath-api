@@ -90,7 +90,8 @@ public class MathProblem
         SolutionLatexOrder = this.Solution?.ConvertAll(ss => ss.Latex)
     };
 
-    private static List<MathOption> GetOptions(IReadOnlyList<bool> renderAsLatexOrder, IReadOnlyList<int> numberOrder, IReadOnlyList<string> valueOrder)
+    private static List<MathOption> GetOptions(IReadOnlyList<bool> renderAsLatexOrder, IReadOnlyList<int> numberOrder,
+        IReadOnlyList<string> valueOrder)
     {
         int count;
 

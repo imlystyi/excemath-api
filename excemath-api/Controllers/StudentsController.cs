@@ -4,14 +4,12 @@ using excemathApi.Validators;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using static excemathApi.Controllers.ControllerResults;
 
 namespace excemathApi.Controllers;
 
-// TODO: StudentsController class documentation.
-// TODO: Test StudentsController methods.
-
 /// <summary>
-///
+/// Represents a controller that interacts with entities of the <see cref="Student"/> and <see cref="StudentDto"/> types.
 /// </summary>
 [ApiController]
 [Route("api/students")]
@@ -19,7 +17,12 @@ public class StudentsController : Controller
 {
     #region Fields
 
-    private const int _TOP_LIST_COUNT = 10;
+    /// <summary>
+    /// Number of students in the first list.
+    /// </summary>
+    public const int TOP_LIST_COUNT = 10;
+
+    private const string _STUDENTS_CONTROLLER_ERROR_HEADER = "StudentsController error ";
 
     private readonly StudentsDbContext _dbContext;
 
@@ -28,238 +31,383 @@ public class StudentsController : Controller
     #region Constructors
 
     /// <summary>
-    /// 
+    /// Creates a new instance of the <see cref="StudentsController"/> class with the specified database context.
     /// </summary>
-    /// <param name="dbContext"></param>
+    /// <param name="dbContext">Database context.</param>
     public StudentsController(StudentsDbContext dbContext) => _dbContext = dbContext;
 
     #endregion
 
-#nullable enable
+    #nullable enable
 
     #region GET methods
 
+    /// <summary>
+    /// Asynchronously finds the student in the database by their nickname and returns they.
+    /// </summary>
+    /// <param name="nickname">Student identifier.</param>
+    /// <returns>If the student is found, an <see cref="OkObjectResult"/> with a <see cref="Student"/> object as content; otherwise, <see cref="NotFoundResult"/>.<br>
+    /// If an exception occurs during operations, returns <see cref="InternalServerErrorObjectResult"/> with this exception as content.</br></returns>
     [HttpGet]
     [Route("get/find_one")]
-    public async Task<IActionResult> FindOne([FromQuery] string nickname)
+    public async Task<IActionResult> FindOneAsync([FromQuery] string nickname)
     {
-        StudentDto? dto = await _dbContext.Students.FirstOrDefaultAsync(ss => ss.Nickname == nickname);
+        try
+        {
+            StudentDto? dto = await _dbContext.Students.FirstOrDefaultAsync(ss => ss.Nickname == nickname);
 
-        return (dto is null) ? NotFound() : Ok(new Student(dto));
+            return dto is null
+                ? NotFound()
+                : Ok(new Student(dto));
+        }
+        catch (Exception ex)
+        {
+            return InternalServerError(ex);
+        }
     }
 
+    /// <summary>
+    /// Asynchronously finds the list of students in the database by nickname (as a substring of nickname) and returns it.
+    /// </summary>
+    /// <param name="nickname">Nickname (nickname substring) of the sought students in the list.</param>
+    /// <returns>An <see cref="OkObjectResult"/> with list of students as <see cref="List{T}"/> from <see cref="Student"/> objects as content.<br>
+    /// If an exception occurs during operations, returns <see cref="InternalServerErrorObjectResult"/> with this exception as content.</br></returns>
     [HttpGet]
     [Route("get/find_list")]
-    public async Task<IActionResult> FindList([FromQuery] string nickname)
+    public async Task<IActionResult> FindListAsync([FromQuery] string nickname)
     {
-        List<StudentDto> dtos = await _dbContext.Students.Where(ss => ss.Nickname.Contains(nickname)).ToListAsync();
+        try
+        {
+            List<StudentDto> dtos = await _dbContext.Students.Where(ss => ss.Nickname.Contains(nickname)).ToListAsync();
 
-        return Ok(dtos.ConvertAll(dto => new Student(dto)));
+            return Ok(dtos.ConvertAll(dto => new Student(dto)));
+        }
+        catch (Exception ex)
+        {
+            return InternalServerError(ex);
+        }
     }
 
+    /// <summary>
+    /// Asynchronously finds a top list of students ordered by their experience and returns it.
+    /// </summary>
+    /// <returns>An <see cref="OkObjectResult"/> with list of students as <see cref="List{T}"/> from <see cref="Student"/> objects with <see cref="TOP_LIST_COUNT"/> elements count as content.<br>
+    /// If an exception occurs during operations, returns <see cref="InternalServerErrorObjectResult"/> with this exception as content.</br></returns>
     [HttpGet]
-    [Route("get/get_top_list")]
-    public async Task<IActionResult> GetTopList()
+    [Route("get/find_top_list")]
+    public async Task<IActionResult> FindTopListAsync()
     {
-        List<StudentDto> dtos = await _dbContext.Students.OrderByDescending(ss => ss.Experience).Take(_TOP_LIST_COUNT).ToListAsync();
+        try
+        {
+            List<StudentDto> dtos = await _dbContext.Students.OrderByDescending(ss => ss.Experience).Take(TOP_LIST_COUNT).ToListAsync();
 
-        return Ok(dtos.ConvertAll(dto => new Student(dto)));
-    }
-
-    [HttpGet]
-    [Route("get/validate_password")]
-    public async Task<IActionResult> ValidatePassword([FromQuery] string password)
-    {
-        StringValidator validator = new();
-        ValidationResult result = await validator.ValidateAsync(password);
-
-        if (result.IsValid)
-            return Ok();
-
-        return BadRequest(result.Errors.ConvertAll(ee => ee.ErrorCode));
+            return Ok(dtos.ConvertAll(dto => new Student(dto)));
+        }
+        catch (Exception ex)
+        {
+            return InternalServerError(ex);
+        }
     }
 
     #endregion
 
     #region POST methods
 
+    /// <summary>
+    /// Asynchronously adds a student with the specified identifier and nickname to the database.
+    /// </summary>
+    /// <param name="id">Student identifier.</param>
+    /// <param name="nickname">Student nickname.</param>
+    /// <returns>An <see cref="OkResult"/> if the student is added successfully; otherwise, if there are no entries while saving changes to the database, <see cref="InternalServerErrorObjectResult"/> with the error text as contents.<br>
+    /// If an exception occurs during operations, returns <see cref="InternalServerErrorObjectResult"/> with this exception as content.</br></returns>
     [HttpPost]
     [Route("post/add")]
-    public async Task<IActionResult> Add([FromQuery] Guid id, [FromQuery] string nickname)
+    public async Task<IActionResult> AddAsync([FromQuery] Guid id, [FromQuery] string nickname)
     {
-        StudentDto dto = new()
+        try
         {
-            Id = id,
-            Nickname = nickname
-        };
+            StudentDto dto = new()
+            {
+                Id = id,
+                Nickname = nickname
+            };
 
-        _ = await _dbContext.Students.AddAsync(dto);
-        int entries = await _dbContext.SaveChangesAsync();
+            _ = await _dbContext.Students.AddAsync(dto);
+            int entries = await _dbContext.SaveChangesAsync();
 
-        if (entries > 0)
-            return Ok();
-
-        return Conflict();
+            return entries > 0
+                ? Ok()
+                : InternalServerError(_STUDENTS_CONTROLLER_ERROR_HEADER +
+                                      $"({nameof(AddAsync)} method): no \"{nameof(entries)}\" while saving changes.");
+        }
+        catch (Exception ex)
+        {
+            return InternalServerError(ex);
+        }
     }
 
     #endregion
 
     #region PUT methods
 
+    /// <summary>
+    /// Asynchronously adds the specified solved math problem to the achievements of the student with the specified identifier.
+    /// </summary>
+    /// <param name="studentId">Student identifier.</param>
+    /// <param name="mathProblemId">Solved math problem identifier.</param>
+    /// <param name="difficulty">Solved math problem difficulty.</param>
+    /// <param name="type">Solved math problem type.</param>
+    /// <returns>An <see cref="OkResult"/> if the solved math problem is added successfully; otherwise, if the student is not found, <see cref="NotFoundResult"/>; otherwise, if there are no entries while saving changes to the database, <see cref="InternalServerErrorObjectResult"/> with the error text as content.<br>
+    /// If an exception occurs during operations, returns <see cref="InternalServerErrorObjectResult"/> with this exception as content.</br></returns>
     [HttpPut]
-    [Route("put/increase_solved_math_problems")]
-    public async Task<IActionResult> IncreaseSolvedMathProblems([FromQuery] Guid studentId, [FromQuery] Guid mathProblemId, [FromQuery] int difficulty, [FromQuery] MathProblemTypes type)    
+    [Route("put/add_solved_math_problems")]
+    public async Task<IActionResult> AddSolvedMathProblemsAsync([FromQuery] Guid studentId, [FromQuery] Guid mathProblemId,
+        [FromQuery] int difficulty, [FromQuery] MathProblemTypes type)
     {
-        StudentDto? dto = await _dbContext.Students.FindAsync(studentId);
+        try
+        {
+            StudentDto? dto = await _dbContext.Students.FindAsync(studentId);
 
-        if (dto is null)
-            return NotFound();
+            if (dto is null)
+                return NotFound();
 
-        dto.SolvedMathProblems.Add(mathProblemId);
-        dto.Experience += difficulty;
-        dto.CorrectAnswersOrder[(int)type]++;
-        int entries = await _dbContext.SaveChangesAsync();
+            dto.SolvedMathProblems.Add(mathProblemId);
+            dto.Experience += difficulty;
+            dto.CorrectAnswersOrder[(int)type]++;
 
-        if (entries > 0)
-            return Ok();
+            int entries = await _dbContext.SaveChangesAsync();
 
-        return Conflict();
+            return entries > 0
+                ? Ok()
+                : InternalServerError(_STUDENTS_CONTROLLER_ERROR_HEADER +
+                                      $"({nameof(AddSolvedMathProblemsAsync)} method): no \"{nameof(entries)}\" while saving changes.");
+        }
+        catch (Exception ex)
+        {
+            return InternalServerError(ex);
+        }
     }
 
+    /// <summary>
+    /// Asynchronously adds the incorrect answer to the achievements of the student with the specified identifier.
+    /// </summary>
+    /// <param name="id">Student identifier.</param>
+    /// <param name="type">The type of math problem that was answered incorrectly.</param>
+    /// <returns>An <see cref="OkResult"/> if the incorrect answer is added successfully; otherwise, if the student is not found, <see cref="NotFoundResult"/>; otherwise, if there are no entries while saving changes to the database, <see cref="InternalServerErrorObjectResult"/> with the error text as content.<br>
+    /// If an exception occurs during operations, returns <see cref="InternalServerErrorObjectResult"/> with this exception as content.</br></returns>
     [HttpPut]
-    [Route("put/increase_incorrect_answers")]
-    public async Task<IActionResult> IncreaseIncorrectAnswers([FromQuery] Guid id, [FromQuery] MathProblemTypes type)
+    [Route("put/add_incorrect_answer")]
+    public async Task<IActionResult> AddIncorrectAnswerAsync([FromQuery] Guid id, [FromQuery] MathProblemTypes type)
     {
-        StudentDto? dto = await _dbContext.Students.FindAsync(id);
+        try
+        {
+            StudentDto? dto = await _dbContext.Students.FindAsync(id);
 
-        if (dto is null)
-            return NotFound();
+            if (dto is null)
+                return NotFound();
 
-        dto.IncorrectAnswersOrder[(int)type]++;
-        int entries = await _dbContext.SaveChangesAsync();
+            dto.IncorrectAnswersOrder[(int)type]++;
+            int entries = await _dbContext.SaveChangesAsync();
 
-        if (entries > 0)
-            return Ok();
-
-        return Conflict();
+            return entries > 0
+                ? Ok()
+                : InternalServerError(_STUDENTS_CONTROLLER_ERROR_HEADER +
+                                      $"({nameof(AddIncorrectAnswerAsync)} method): no \"{nameof(entries)}\" while saving changes.");
+        }
+        catch (Exception ex)
+        {
+            return InternalServerError(ex);
+        }
     }
 
+    /// <summary>
+    /// Asynchronously updates the nickname of the student with the specified identifier.
+    /// </summary>
+    /// <param name="id">Student identifier.</param>
+    /// <param name="nickname">New nickname.</param>
+    /// <returns>An <see cref="OkResult"/> if the nickname is updated successfully; otherwise, if the student is not found, <see cref="NotFoundResult"/>; otherwise, if there are no entries while saving changes to the database, <see cref="InternalServerErrorObjectResult"/> with the error text as content.<br>
+    /// If an exception occurs during operations, returns <see cref="InternalServerErrorObjectResult"/> with this exception as content.</br></returns>
     [HttpPut]
     [Route("put/update_nickname")]
-    public async Task<IActionResult> UpdateNickname([FromQuery] Guid id, [FromQuery] string nickname)
+    public async Task<IActionResult> UpdateNicknameAsync([FromQuery] Guid id, [FromQuery] string nickname)
     {
-        StudentDto? student = await _dbContext.Students.FindAsync(id);
+        try
+        {
+            StudentDto? dto = await _dbContext.Students.FindAsync(id);
 
-        if (student is null)
-            return NotFound();
+            if (dto is null)
+                return NotFound();
 
-        StringValidator validator = new(nameof(StudentDto.Nickname));
-        ValidationResult result = await validator.ValidateAsync(nickname);
+            StringValidator validator = new(nameof(StudentDto.Nickname));
+            ValidationResult result = await validator.ValidateAsync(nickname);
 
-        if (!result.IsValid)
-            return BadRequest(result.Errors);
+            if (!result.IsValid)
+                return BadRequest(result.Errors);
 
-        student.Nickname = nickname;
-        int entries = await _dbContext.SaveChangesAsync();
+            dto.Nickname = nickname;
+            int entries = await _dbContext.SaveChangesAsync();
 
-        if (entries > 0)
-            return Ok();
-
-        return Conflict();
+            return entries > 0
+                ? Ok()
+                : InternalServerError(_STUDENTS_CONTROLLER_ERROR_HEADER +
+                                      $"({nameof(UpdateNicknameAsync)} method): no \"{nameof(entries)}\" while saving changes.");
+        }
+        catch (Exception ex)
+        {
+            return InternalServerError(ex);
+        }
     }
 
+    /// <summary>
+    /// Asynchronously updates the first name of the student with the specified identifier.
+    /// </summary>
+    /// <param name="id">Student identifier.</param>
+    /// <param name="firstName">New first name.</param>
+    /// <returns>An <see cref="OkResult"/> if the first name is updated successfully; otherwise, if the student is not found, <see cref="NotFoundResult"/>; otherwise, if there are no entries while saving changes to the database, <see cref="InternalServerErrorObjectResult"/> with the error text as content.<br>
+    /// If an exception occurs during operations, returns <see cref="InternalServerErrorObjectResult"/> with this exception as content.</br></returns>
     [HttpPut]
     [Route("put/update_first_name")]
-    public async Task<IActionResult> UpdateFirstName([FromQuery] Guid id, [FromQuery] string firstName)
+    public async Task<IActionResult> UpdateFirstNameAsync([FromQuery] Guid id, [FromQuery] string firstName)
     {
-        StudentDto? student = await _dbContext.Students.FindAsync(id);
+        try
+        {
+            StudentDto? student = await _dbContext.Students.FindAsync(id);
 
-        if (student is null)
-            return NotFound();
+            if (student is null)
+                return NotFound();
 
-        StringValidator validator = new(nameof(StudentDto.FirstName));
-        ValidationResult result = await validator.ValidateAsync(firstName);
+            StringValidator validator = new(nameof(StudentDto.FirstName));
+            ValidationResult result = await validator.ValidateAsync(firstName);
 
-        if (!result.IsValid)
-            return BadRequest(result.Errors);
+            if (!result.IsValid)
+                return BadRequest(result.Errors);
 
-        student.FirstName = firstName;
-        int entries = await _dbContext.SaveChangesAsync();
+            student.FirstName = firstName;
+            int entries = await _dbContext.SaveChangesAsync();
 
-        if (entries > 0)
-            return Ok();
-
-        return Conflict();
+            return entries > 0
+                ? Ok()
+                : InternalServerError(_STUDENTS_CONTROLLER_ERROR_HEADER +
+                                      $"({nameof(UpdateFirstNameAsync)} method): no \"{nameof(entries)}\" while saving changes.");
+        }
+        catch (Exception ex)
+        {
+            return InternalServerError(ex);
+        }
     }
 
+    /// <summary>
+    /// Asynchronously updates the last name of the student with the specified identifier.
+    /// </summary>
+    /// <param name="id">Student identifier.</param>
+    /// <param name="lastName">New last name.</param>
+    /// <returns>An <see cref="OkResult"/> if the last name is updated successfully; otherwise, if the student is not found, <see cref="NotFoundResult"/>; otherwise, if there are no entries while saving changes to the database, <see cref="InternalServerErrorObjectResult"/> with the error text as content.<br>
+    /// If an exception occurs during operations, returns <see cref="InternalServerErrorObjectResult"/> with this exception as content.</br></returns>
     [HttpPut]
     [Route("put/update_last_name")]
-    public async Task<IActionResult> UpdateLastName([FromQuery] Guid id, [FromQuery] string lastName)
+    public async Task<IActionResult> UpdateLastNameAsync([FromQuery] Guid id, [FromQuery] string lastName)
     {
-        StudentDto? student = await _dbContext.Students.FindAsync(id);
+        try
+        {
+            StudentDto? student = await _dbContext.Students.FindAsync(id);
 
-        if (student is null)
-            return NotFound();
+            if (student is null)
+                return NotFound();
 
-        StringValidator validator = new(nameof(StudentDto.LastName));
-        ValidationResult result = await validator.ValidateAsync(lastName);
+            StringValidator validator = new(nameof(StudentDto.LastName));
+            ValidationResult result = await validator.ValidateAsync(lastName);
 
-        if (!result.IsValid)
-            return BadRequest(result.Errors);
+            if (!result.IsValid)
+                return BadRequest(result.Errors);
 
-        student.LastName = lastName;
-        int entries = await _dbContext.SaveChangesAsync();
+            student.LastName = lastName;
+            int entries = await _dbContext.SaveChangesAsync();
 
-        if (entries > 0)
-            return Ok();
-
-        return Conflict();
+            return entries > 0
+                ? Ok()
+                : InternalServerError(_STUDENTS_CONTROLLER_ERROR_HEADER +
+                                      $"({nameof(UpdateLastNameAsync)} method): no \"{nameof(entries)}\" while saving changes.");
+        }
+        catch (Exception ex)
+        {
+            return InternalServerError(ex);
+        }
     }
 
+    /// <summary>
+    /// Asynchronously updates the location of the student with the specified identifier.
+    /// </summary>
+    /// <param name="id">Student identifier.</param>
+    /// <param name="location">New location.</param>
+    /// <returns>An <see cref="OkResult"/> if the location is updated successfully; otherwise, if the student is not found, <see cref="NotFoundResult"/>; otherwise, if there are no entries while saving changes to the database, <see cref="InternalServerErrorObjectResult"/> with the error text as content.<br>
+    /// If an exception occurs during operations, returns <see cref="InternalServerErrorObjectResult"/> with this exception as content.</br></returns>
     [HttpPut]
     [Route("put/update_location")]
-    public async Task<IActionResult> UpdateLocation([FromQuery] Guid id, [FromQuery] string location)
+    public async Task<IActionResult> UpdateLocationAsync([FromQuery] Guid id, [FromQuery] string location)
     {
-        StudentDto? student = await _dbContext.Students.FindAsync(id);
+        try
+        {
+            StudentDto? student = await _dbContext.Students.FindAsync(id);
 
-        if (student is null)
-            return NotFound();
-        StringValidator validator = new(nameof(StudentDto.Location));
-        ValidationResult result = await validator.ValidateAsync(location);
+            if (student is null)
+                return NotFound();
 
-        if (!result.IsValid)
-            return BadRequest(result.Errors);
+            StringValidator validator = new(nameof(StudentDto.Location));
+            ValidationResult result = await validator.ValidateAsync(location);
 
-        student.Location = location;
-        int entries = await _dbContext.SaveChangesAsync();
+            if (!result.IsValid)
+                return BadRequest(result.Errors);
 
-        if (entries > 0)
-            return Ok();
+            student.Location = location;
+            int entries = await _dbContext.SaveChangesAsync();
 
-        return Conflict();
+            return entries > 0
+                ? Ok()
+                : InternalServerError(_STUDENTS_CONTROLLER_ERROR_HEADER +
+                                      $"({nameof(UpdateLocationAsync)} method): no \"{nameof(entries)}\" while saving changes.");
+        }
+        catch (Exception ex)
+        {
+            return InternalServerError(ex);
+        }
     }
 
+    /// <summary>
+    /// Asynchronously updates the about information of the student with the specified identifier.
+    /// </summary>
+    /// <param name="id">Student identifier.</param>
+    /// <param name="about">New about information.</param>
+    /// <returns>An <see cref="OkResult"/> if the about information is updated successfully; otherwise, if the student is not found, <see cref="NotFoundResult"/>; otherwise, if there are no entries while saving changes to the database, <see cref="InternalServerErrorObjectResult"/> with the error text as content.<br>
+    /// If an exception occurs during operations, returns <see cref="InternalServerErrorObjectResult"/> with this exception as content.</br></returns>
     [HttpPut]
     [Route("put/update_about")]
     public async Task<IActionResult> UpdateAbout([FromQuery] Guid id, [FromQuery] string about)
     {
-        StudentDto? student = await _dbContext.Students.FindAsync(id);
+        try
+        {
+            StudentDto? student = await _dbContext.Students.FindAsync(id);
 
-        if (student is null)
-            return NotFound();
-        StringValidator validator = new(nameof(StudentDto.About));
-        ValidationResult result = await validator.ValidateAsync(about);
+            if (student is null)
+                return NotFound();
 
-        if (!result.IsValid)
-            return BadRequest(result.Errors);
+            StringValidator validator = new(nameof(StudentDto.About));
+            ValidationResult result = await validator.ValidateAsync(about);
 
-        student.About = about;
-        int entries = await _dbContext.SaveChangesAsync();
+            if (!result.IsValid)
+                return BadRequest(result.Errors);
 
-        if (entries > 0)
-            return Ok();
+            student.About = about;
+            int entries = await _dbContext.SaveChangesAsync();
 
-        return Conflict();
+            return entries > 0
+                ? Ok()
+                : InternalServerError(_STUDENTS_CONTROLLER_ERROR_HEADER +
+                                      $"({nameof(UpdateAbout)} method): no \"{nameof(entries)}\" while saving changes.");
+        }
+        catch (Exception ex)
+        {
+            return InternalServerError(ex);
+        }
     }
 
     #endregion
