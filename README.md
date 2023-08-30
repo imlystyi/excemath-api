@@ -26,3 +26,7 @@ This software is protected by the [GNU Public License Version 3](https://www.gnu
 - [miu-miu enjoyers](https://github.com/miu-miu-enjoyers) has exclusive access to close public access to the program code at any time;
 - the distribution of **excemath API** as a separate software product is allowed only with an explicit indication of the link to the official repository page and an absolute copy of the software code without any changes;
 - [miu-miu enjoyers](https://github.com/miu-miu-enjoyers) uses the law of Ukraine ["About copyright and related rights"](https://zakon.rada.gov.ua/laws/show/2811-20#Text) and the [Civil Code of Ukraine](https://zakon.rada.gov.ua/laws/show/435-15#Text) in those places where the License or the Appendix to the License may be inaccurate, implicit, such that they do not provide a comprehensive answer to questions or terminology.
+
+You can contact us by messaging to Team Lead:
+ - **by paper mail:** 23 Yevhena Patona street, Zaliznychnyi raion, Lviv, Lviv oblast, 79040, Ukraine
+ - **by email:** vladyslav.yakubovskyi.work@gmail.com
