@@ -1,6 +1,6 @@
 ﻿###     excemath API  Copyright (C) 2023  miu-miu enjoyers
-###     See the full license text in the LICENSE file or on the repository page: 
-###     https://github.com/miu-miu-enjoyers/excemath-api
+###     See the full license text in the LICENSE file or on the official repository page: 
+###     <https://github.com/miu-miu-enjoyers/excemath-api>
 ###     Validation rules of the StringValidator
 
 
