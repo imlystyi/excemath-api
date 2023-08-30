@@ -17,7 +17,7 @@
 
 ## Behavior Diagram of Models
 You can quickly familiarize yourself with the API logic with this diagram.
-![Behavior Diagram of Models](https://github.com/miu-miu-enjoyers/excemath-api/assets/47981548/ffbe016f-b95a-4e33-ae17-94dc20855ab1)
+![Behavior Diagram of Models](https://github.com/miu-miu-enjoyers/excemath-api/blob/master/diagrams/Behavior%20Diagram%20of%20Models.png)
 
 ## License
 This software is protected by the [GNU Public License Version 3](https://www.gnu.org/licenses/gpl-3.0.en.html). Also note that:
