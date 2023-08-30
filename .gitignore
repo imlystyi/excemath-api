@@ -206,6 +206,9 @@ PublishScripts/
 *.nuget.props
 *.nuget.targets
 
+# draw.io Backups
+*.drawio.backup
+
 # Microsoft Azure Build Output
 csx/
 *.build.csdef
