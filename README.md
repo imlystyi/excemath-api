@@ -1,39 +1,28 @@
 <br/>
-
 <div align="center">
   <a href="https://github.com/miu-miu-enjoyers/excemath-api">
     <img src="https://github.com/miu-miu-enjoyers/excemath/assets/47981548/bf490c4c-70ea-409b-b89b-e9bbf0d64f73" alt="Логотип" width="200" height="200">
-  </a>
-  
+  </a>  
 <h3 align="center"><font size="7"> excemath API </font></h3>
-
   <p align="center">
-  Якщо тобі потрібний каркас API для освітніх проєктів, що пов'язані з математикою - ти знайшов правильний проєкт!
+    Open source API for educational projects related to mathematics
     <br/>
 </div>
  
- ## Що це?
- **excemath API** - гнучке API з відкритим початковим кодом, що дозволяє створювати додатки, напрямлені на поліпшення знань про математику: тренажери, математичні тренажери, інтерактивні збірники задач, тощо. Поточна версія API розроблена для використання у додатку [**excemath**](https://github.com/miu-miu-enjoyers/excemath) та має власну MVC- та DTO-архітектуру. 
-<ins>У випадку найменшої несумісності API з твоїм програмним продуктом, не використовуй готову архітектуру!</ins>
- 
- ## Як цим користуватися?
- ### Якщо ти використовуєш API для власного програмного продукту
-  1. Завантаж останню версію [вихідного коду API](https://github.com/miu-miu-enjoyers/excemath-api/releases).
-  2. Створи базу даних та підключи її до проєкту (у Visual Studio це найлегше зробити за допомогою Сonnected Services).
-  3. За потребою, внеси у код корективи (зміни види математичних задач, логіку контролерів, тощо).
-  4. Виконай міграцію бази даних.
-  5. Підключи API до свого програмного продукту.
-<ins>Використовуючи API для власного програмного продукту, зовсім не гарантується його стабільна робота. Забезпечення стабільності - твоя відповідальність! Не створюй Issues, якщо в такому випадку у тебе виникають проблеми!</ins>
+## What is it?
+**excemath API** is an open source API created for the full functionality of the [**excemath**](https://github.com/miu-miu-enjoyers/excemath) application.
 
-### Якщо ти використовуєш API для excemath
-  1. Завантаж останню версію [вихідного коду API](https://github.com/miu-miu-enjoyers/excemath-api/releases).
-  2. Створи базу даних та підключи її до проєкту (у Visual Studio це найлегше зробити за допомогою Сonnected Services).
-  3. Виконай міграцію бази даних.
-  4. Наповни базу даних за [окремим гайдом.](https://github.com/miu-miu-enjoyers/excemath-api/blob/master/DB_GUIDE.md)
-  5. Виконай хостинг API та отримай його адресу (у випадку хостингу на локальній машині, рекомендуємо використовувати DevTunnel).
+## Technologies and platforms
+**excemath API** mainly uses the [ASP.NET](https://dotnet.microsoft.com/en-us/apps/aspnet) platform and [Entity Framework](https://learn.microsoft.com/en-us/ef/). It also uses the [FluentValidation](https://docs.fluentvalidation.net/en/latest/) library for data validation and the [Npgsql](https://www.npgsql.org/) library as a data provider for PostgreSQL.
 
-## Технології, якими ми користувалися
-Ми використовували платформу для створення веб-додатків [ASP.NET](https://dotnet.microsoft.com/en-us/apps/aspnet) у зв'язці з фрейморком [Entity Framework](https://learn.microsoft.com/en-us/ef/). Валідація отриманих даних відбувається за допомогою бібліотеки [FluentValidation](https://docs.fluentvalidation.net/en/latest/). 
+## Behavior Diagram of Models
+You can quickly familiarize yourself with the API logic with this diagram.
+![Behavior Diagram of Models](https://github.com/miu-miu-enjoyers/excemath-api/assets/47981548/ffbe016f-b95a-4e33-ae17-94dc20855ab1)
 
-## Хто створив цей додаток?
-Ми - команда [**miu-miu enjoyers**](https://github.com/miu-miu-enjoyers) - студенти Національного університету "Львівська політехніка". Наш проєкт було створено до пітчинґу з дисципліни "Програмування та командна робота", де ми посіли перше місце! (йоу)
+## License
+This software is protected by the [GNU Public License Version 3](https://www.gnu.org/licenses/gpl-3.0.en.html). Also note that:
+- diagrams and other non-code documentation are the exclusive property of [miu-miu enjoyers](https://github.com/miu-miu-enjoyers);
+- [miu-miu enjoyers](https://github.com/miu-miu-enjoyers) has exclusive access to cancel the current License and its terms at any time;
+- [miu-miu enjoyers](https://github.com/miu-miu-enjoyers) has exclusive access to close public access to the program code at any time;
+- the distribution of **excemath API** as a separate software product is allowed only with an explicit indication of the link to the official repository page and an absolute copy of the software code without any changes;
+- [miu-miu enjoyers](https://github.com/miu-miu-enjoyers) uses the law of Ukraine ["About copyright and related rights"](https://zakon.rada.gov.ua/laws/show/2811-20#Text) and the [Civil Code of Ukraine](https://zakon.rada.gov.ua/laws/show/435-15#Text) in those places where the License or the Appendix to the License may be inaccurate, implicit, such that they do not provide a comprehensive answer to questions or terminology.
