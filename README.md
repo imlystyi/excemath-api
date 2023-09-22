@@ -15,17 +15,13 @@
 ## Technologies and platforms
 **excemath API** mainly uses the [ASP.NET](https://dotnet.microsoft.com/en-us/apps/aspnet) platform and [Entity Framework](https://learn.microsoft.com/en-us/ef/). It also uses the [FluentValidation](https://docs.fluentvalidation.net/en/latest/) library for data validation and the [Npgsql](https://www.npgsql.org/) library as a data provider for PostgreSQL.
 
-## Behavior Diagram of Models
-You can quickly familiarize yourself with the API logic with this diagram.
-![Behavior Diagram of Models](https://github.com/miu-miu-enjoyers/excemath-api/blob/master/diagrams/Behavior%20Diagram%20of%20Models.png)
-
 ## License
 This software is protected by the [GNU Public License Version 3](https://www.gnu.org/licenses/gpl-3.0.en.html). Also note that:
 - diagrams and other non-code documentation are the exclusive property of [miu-miu enjoyers](https://github.com/miu-miu-enjoyers);
 - [miu-miu enjoyers](https://github.com/miu-miu-enjoyers) has exclusive access to cancel the current License and its terms at any time;
 - [miu-miu enjoyers](https://github.com/miu-miu-enjoyers) has exclusive access to close public access to the program code at any time;
 - the distribution of **excemath API** as a separate software product is allowed only with an explicit indication of the link to the official repository page and an absolute copy of the software code without any changes;
-- [miu-miu enjoyers](https://github.com/miu-miu-enjoyers) uses the law of Ukraine ["About copyright and related rights"](https://zakon.rada.gov.ua/laws/show/2811-20#Text) and the [Civil Code of Ukraine](https://zakon.rada.gov.ua/laws/show/435-15#Text) in those places where the License or the Appendix to the License may be inaccurate, implicit, such that they do not provide a comprehensive answer to questions or terminology.
+- [miu-miu enjoyers](https://github.com/miu-miu-enjoyers) uses the law of Ukraine ["About copyright and related rights"](https://zakon.rada.gov.ua/laws/show/2811-20#Text) and the [Civil Code of Ukraine](https://zakon.rada.gov.ua/laws/show/435-15#Text) in those places where the License may be inaccurate, implicit, such that they do not provide a comprehensive answer to questions or terminology.
 
 You can contact us by messaging to Team Lead:
  - **by paper mail:** 23 Yevhena Patona street, Zaliznychnyi raion, Lviv, Lviv oblast, 79040, Ukraine
